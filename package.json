@@ -1,0 +1,24 @@
+{
+  "name": "tcci",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arthurteixeira/TCCI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arthurteixeira/TCCI/issues"
+  },
+  "homepage": "https://github.com/arthurteixeira/TCCI#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "serialport": "^9.0.6",
+    "socket.io": "^3.1.1"
+  }
+}
