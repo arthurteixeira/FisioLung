@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE-edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Arduino Node.js</title>
+ 
+	<!-- Socket.io - aqui chamamos nosso socket. -->
+	<script src="/socket.io/socket.io.js"></script>
+ 
+	<!-- Chart - aqui chamamos nossa lib que gera o gráfico. -->
+	<script src="js/Chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+</head>
+ 
+<body>
+    <!-- criamos um canvas e atribuímos um tamanho que será o gráfico. -->
+	<canvas id="myChart" width="600" height="200"></canvas>
+	<script type="text/javascript">
+		var contador = 0; // contador para gerar o eixo x do gráfico 
+		var ctx = document.getElementById("myChart").getContext("2d");
+		var myChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: [],
+				datasets: [
+				{
+					label: ["Gráfico Arduino"],
+					backgroundColor: "rgba(255, 99, 132)",
+					borderColor: "rgba(255, 99, 132)",
+					data: [],
+					fill: false,
+				}
+				]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Aceleração (m/s²)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Frequência (Hz)'
+						},
+					}]
+				}     
+}
+		});
+
+		function addData(chart, label, data) {
+			myChart.data.labels.push(label);
+			myChart.data.datasets.forEach((dataset) => {
+				dataset.data.push(data);
+			});
+			myChart.update();
+		}
+
+		var socket = io();
+		socket.on("dadosArduino", function(dado) {	
+			//console.log('Dados: ' + myChart.data.datasets[0].data);		
+			if(dado.valor != null){	
+				console.log(dado.valor);
+				addData(myChart, contador++, [dado.valor]);
+			}		
+		});
+	</script>
+ 
+</body>
+</html>
