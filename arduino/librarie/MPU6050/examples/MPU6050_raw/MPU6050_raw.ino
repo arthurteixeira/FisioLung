@@ -28,14 +28,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-    Arduino UNO    MPU6050
-        A4           SDA
-        A5           SCL
-        VCC          5V
-        GND          GND
-
-
 ===============================================
 */
 
@@ -73,10 +65,6 @@ int16_t gx, gy, gz;
 // for a human.
 //#define OUTPUT_BINARY_ACCELGYRO
 
-char string[50];
-char sax[10];
-char say[10];
-char saz[10];
 
 #define LED_PIN 13
 bool blinkState = false;
@@ -95,17 +83,17 @@ void setup() {
     Serial.begin(38400);
 
     // initialize device
-    //Serial.println("Initializing I2C devices...");
+    Serial.println("Initializing I2C devices...");
     accelgyro.initialize();
 
     // verify connection
-    //Serial.println("Testing device connections...");
-    //Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
+    Serial.println("Testing device connections...");
+    Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
 
     // use the code below to change accel/gyro offset values
     /*
     Serial.println("Updating internal sensor offsets...");
-    // -76  -2359 1688  0 0 0
+    // -76	-2359	1688	0	0	0
     Serial.print(accelgyro.getXAccelOffset()); Serial.print("\t"); // -76
     Serial.print(accelgyro.getYAccelOffset()); Serial.print("\t"); // -2359
     Serial.print(accelgyro.getZAccelOffset()); Serial.print("\t"); // 1688
@@ -139,35 +127,25 @@ void loop() {
 
     #ifdef OUTPUT_READABLE_ACCELGYRO
         // display tab-separated accel/gyro x/y/z values
-        /*memset(string, '\0', sizeof(string));
-        strcat(string, "x" );
-        itoa(ax, sax, 10);
-        strcat(string, sax );
-        strcat(string, "y" );
-        itoa(ay, say, 10);
-        strcat(string, say );
-        strcat(string, "z" );
-        itoa(az, saz, 10);
-        strcat(string, saz );
-        Serial.println(string);*/
-
-        Serial.print("x"); Serial.println(ax);
-        Serial.print("y"); Serial.println(ay);
-        Serial.print("z"); Serial.println(az);
-        
+        Serial.print("a/g:\t");
+        Serial.print(ax); Serial.print("\t");
+        Serial.print(ay); Serial.print("\t");
+        Serial.print(az); Serial.print("\t");
+        Serial.print(gx); Serial.print("\t");
+        Serial.print(gy); Serial.print("\t");
+        Serial.println(gz);
     #endif
 
-    /*#ifdef OUTPUT_BINARY_ACCELGYRO
+    #ifdef OUTPUT_BINARY_ACCELGYRO
         Serial.write((uint8_t)(ax >> 8)); Serial.write((uint8_t)(ax & 0xFF));
         Serial.write((uint8_t)(ay >> 8)); Serial.write((uint8_t)(ay & 0xFF));
         Serial.write((uint8_t)(az >> 8)); Serial.write((uint8_t)(az & 0xFF));
-    #endif*/
+        Serial.write((uint8_t)(gx >> 8)); Serial.write((uint8_t)(gx & 0xFF));
+        Serial.write((uint8_t)(gy >> 8)); Serial.write((uint8_t)(gy & 0xFF));
+        Serial.write((uint8_t)(gz >> 8)); Serial.write((uint8_t)(gz & 0xFF));
+    #endif
 
     // blink LED to indicate activity
-    //blinkState = !blinkState;
-    //digitalWrite(LED_PIN, blinkState);
-
-
-     delay(1000);
-    
+    blinkState = !blinkState;
+    digitalWrite(LED_PIN, blinkState);
 }

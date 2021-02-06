@@ -25,13 +25,27 @@
 			data: {
 				labels: [],
 				datasets: [
-				{
-					label: ["Gráfico Arduino"],
-					backgroundColor: "rgba(255, 99, 132)",
-					borderColor: "rgba(255, 99, 132)",
-					data: [],
-					fill: false,
-				}
+					{
+						label: ["Eixo X"],
+						backgroundColor: "rgba(255, 99, 132)",
+						borderColor: "rgba(255, 99, 132)",
+						data: [],
+						fill: false,
+					},
+					{
+						label: ["Eixo Y"],
+						backgroundColor: "rgba(51, 204, 255)",
+						borderColor: "rgb(51, 204, 255)",
+						data: [],
+						fill: false,
+					},
+					{
+						label: ["Eixo Z"],
+						backgroundColor: "rgba(255, 204, 0)",
+						borderColor: "rgba(255, 204, 0)",
+						data: [],
+						fill: false,
+					}
 				]
 			},
 			options: {
@@ -52,20 +66,28 @@
 }
 		});
 
-		function addData(chart, label, data) {
+		function addData(chart, label, data, eixo) {
 			myChart.data.labels.push(label);
-			myChart.data.datasets.forEach((dataset) => {
-				dataset.data.push(data);
-			});
+
+			if (eixo == 'x')
+				myChart.data.datasets[0].data.push(data);
+			if (eixo == 'y')
+				myChart.data.datasets[1].data.push(data);
+			if (eixo == 'z')
+				myChart.data.datasets[2].data.push(data);	
+
 			myChart.update();
 		}
 
 		var socket = io();
 		socket.on("dadosArduino", function(dado) {	
-			//console.log('Dados: ' + myChart.data.datasets[0].data);		
-			if(dado.valor != null){	
-				console.log(dado.valor);
-				addData(myChart, contador++, [dado.valor]);
+			//console.log('Dados: ' + myChart.data.datasets[0].data);
+			const eixo = dado.substring(0,1);
+			console.log('eixo: ' + eixo);
+			const newDado = dado.substring(1);
+			console.log('dado: ' + newDado);
+			if(dado != null){	
+				addData(myChart, contador++, parseInt(newDado), eixo);
 			}		
 		});
 	</script>

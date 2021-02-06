@@ -10,7 +10,7 @@
  
  const SerialPort = require("serialport");
  
- 
+ const { StringStream } = require('scramjet');
 /**
  * app.get - 
  */
@@ -24,8 +24,8 @@
  * Onde eu estou colocando "/dev/ttyACM8" você deve substituir essa informação pela sua porta 
  * serial, onde o seu Arduíno está conectado. 
  */
- const mySerial = new SerialPort('COM4', {
- 	baudRate : 9600,
+ const mySerial = new SerialPort('/dev/ttyACM0', {
+ 	baudRate : 38400,
  	parser : new SerialPort.parsers.Readline("\n")
  });
  
@@ -39,14 +39,22 @@
 /**
  * mySerial.on -
  */
- mySerial.on("data", function(data){
+ /*mySerial.on("data", function(data){
  	// Recebe os dados enviados pelo arduino e exibe no console.
- 	console.log(parseInt(data));
+	
+	console.log(data.toString());
+
  	io.emit("dadosArduino", { // Emite um evento e o objeto data recebe valor.
- 		valor: parseInt(data)
+ 		valor: data.toString(),
  	});
- });
+ });*/
  
+ mySerial.pipe(new StringStream) // pipe the stream to scramjet StringStream
+ 	.lines('\n')                  // split per line
+ 	.each(                        // send message per every line
+		data => io.sockets.emit('dadosArduino', data)
+ 	);
+
 /**
  * io.on - Recebe conexão de cliente.
  */
