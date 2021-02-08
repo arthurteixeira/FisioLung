@@ -39,16 +39,6 @@
 /**
  * mySerial.on -
  */
- /*mySerial.on("data", function(data){
- 	// Recebe os dados enviados pelo arduino e exibe no console.
-	
-	console.log(data.toString());
-
- 	io.emit("dadosArduino", { // Emite um evento e o objeto data recebe valor.
- 		valor: data.toString(),
- 	});
- });*/
- 
  mySerial.pipe(new StringStream) // pipe the stream to scramjet StringStream
  	.lines('\n')                  // split per line
  	.each(                        // send message per every line

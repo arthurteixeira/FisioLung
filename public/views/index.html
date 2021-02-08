@@ -59,15 +59,22 @@
 					xAxes: [{
 						scaleLabel: {
 							display: true,
-							labelString: 'Frequência (Hz)'
+							labelString: 'Tempo (s)',
+							type: 'time',
 						},
 					}]
 				}     
 }
 		});
 
+		let k = 0;
+
 		function addData(chart, label, data, eixo) {
-			myChart.data.labels.push(label);
+			k++;
+			if(k == 3){
+				myChart.data.labels.push(label);
+				k = 0;
+			}
 
 			if (eixo == 'x')
 				myChart.data.datasets[0].data.push(data);
@@ -79,15 +86,21 @@
 			myChart.update();
 		}
 
+		var inicio = Date.now();
+
 		var socket = io();
 		socket.on("dadosArduino", function(dado) {	
-			//console.log('Dados: ' + myChart.data.datasets[0].data);
+			//
+			console.log('Dados: ' + myChart.data.datasets[0].data);
+			console.log('labels: ' + myChart.data.labels);
 			const eixo = dado.substring(0,1);
 			console.log('eixo: ' + eixo);
 			const newDado = dado.substring(1);
 			console.log('dado: ' + newDado);
+			let dadoTratado = (parseInt(newDado) / 16384) * 9.81;
+			console.log('dadoTratado: ' + dadoTratado);
 			if(dado != null){	
-				addData(myChart, contador++, parseInt(newDado), eixo);
+				addData(myChart, (Date.now() - inicio)/1000, dadoTratado, eixo);
 			}		
 		});
 	</script>
