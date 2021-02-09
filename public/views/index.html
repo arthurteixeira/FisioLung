@@ -12,11 +12,13 @@
 	<!-- Chart - aqui chamamos nossa lib que gera o gráfico. -->
 	<script src="js/Chart.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+	<script src="js/bundle.js"></script>
 </head>
  
 <body>
     <!-- criamos um canvas e atribuímos um tamanho que será o gráfico. -->
 	<canvas id="myChart" width="600" height="200"></canvas>
+	<canvas id="myChartFFT" width="600" height="200"></canvas>
 	<script type="text/javascript">
 		var contador = 0; // contador para gerar o eixo x do gráfico 
 		var ctx = document.getElementById("myChart").getContext("2d");
@@ -64,10 +66,13 @@
 						},
 					}]
 				}     
-}
+			}
 		});
 
 		let k = 0;
+
+		var { FFT } = require('dsp.js');
+		var fft = new FFT(128, 11);
 
 		function addData(chart, label, data, eixo) {
 			k++;
@@ -76,12 +81,20 @@
 				k = 0;
 			}
 
-			if (eixo == 'x')
+			if (eixo == 'x'){
 				myChart.data.datasets[0].data.push(data);
-			if (eixo == 'y')
+				if(myChart.data.datasets[0].data.length == 128) {
+					fft.forward(myChart.data.datasets[0].data);
+					const spectrum = fft.spectrum;
+					console.log('spectrum: ' + spectrum);
+				}
+			}
+			if (eixo == 'y'){
 				myChart.data.datasets[1].data.push(data);
-			if (eixo == 'z')
-				myChart.data.datasets[2].data.push(data);	
+			}
+			if (eixo == 'z'){
+				myChart.data.datasets[2].data.push(data);
+			}	
 
 			myChart.update();
 		}
@@ -90,15 +103,9 @@
 
 		var socket = io();
 		socket.on("dadosArduino", function(dado) {	
-			//
-			console.log('Dados: ' + myChart.data.datasets[0].data);
-			console.log('labels: ' + myChart.data.labels);
 			const eixo = dado.substring(0,1);
-			console.log('eixo: ' + eixo);
 			const newDado = dado.substring(1);
-			console.log('dado: ' + newDado);
 			let dadoTratado = (parseInt(newDado) / 16384) * 9.81;
-			console.log('dadoTratado: ' + dadoTratado);
 			if(dado != null){	
 				addData(myChart, (Date.now() - inicio)/1000, dadoTratado, eixo);
 			}		

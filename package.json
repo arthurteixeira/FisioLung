@@ -18,6 +18,7 @@
   "homepage": "https://github.com/arthurteixeira/TCCI#readme",
   "dependencies": {
     "chart.js": "^2.9.4",
+    "dsp.js": "^1.0.1",
     "express": "^4.17.1",
     "moment": "^2.29.1",
     "scramjet": "^4.35.12",
