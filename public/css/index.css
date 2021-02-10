@@ -1,0 +1,15 @@
+.principal {
+    margin-top: 30px;
+    margin-left: 80px;
+    margin-right: 80px;
+    margin-bottom: 25px;
+}
+
+.graph {
+    border: 2px;
+    border-color: black;
+    border-style: solid;
+    width: 80px;
+    height: 500px;
+    margin-bottom: 5px;
+}

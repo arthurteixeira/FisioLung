@@ -5,22 +5,39 @@
 	<meta http-equiv="X-UA-Compatible" content="IE-edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Arduino Node.js</title>
- 
+	
 	<!-- Socket.io - aqui chamamos nosso socket. -->
 	<script src="/socket.io/socket.io.js"></script>
- 
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" type="text/css" href="../css/index.css" media="screen" />
 	<!-- Chart - aqui chamamos nossa lib que gera o gráfico. -->
 	<script src="js/Chart.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-	<script src="js/bundle.js"></script>
 </head>
  
 <body>
-    <!-- criamos um canvas e atribuímos um tamanho que será o gráfico. -->
-	<canvas id="myChart" width="600" height="200"></canvas>
-	<canvas id="myChartFFT" width="600" height="200"></canvas>
+	<!-- criamos um canvas e atribuímos um tamanho que será o gráfico. -->
+	<div class="principal">
+		<div class="row">
+			<div class="w-100"></div>
+			<div class="col graph">
+				<canvas id="myChart" width="300" height="200"></canvas>
+			</div>
+			<div class="col graph">
+				<canvas id="myChartY" width="300" height="200"></canvas>
+			</div>
+			<div class="w-100"></div>
+			<div class="col graph">
+				<canvas id="myChartZ" width="300" height="200"></canvas>
+			</div>
+			<div class="col graph">Column</div>
+		</div>
+	</div>
+	
 	<script type="text/javascript">
-		var contador = 0; // contador para gerar o eixo x do gráfico 
 		var ctx = document.getElementById("myChart").getContext("2d");
 		var myChart = new Chart(ctx, {
 			type: 'line',
@@ -34,23 +51,11 @@
 						data: [],
 						fill: false,
 					},
-					{
-						label: ["Eixo Y"],
-						backgroundColor: "rgba(51, 204, 255)",
-						borderColor: "rgb(51, 204, 255)",
-						data: [],
-						fill: false,
-					},
-					{
-						label: ["Eixo Z"],
-						backgroundColor: "rgba(255, 204, 0)",
-						borderColor: "rgba(255, 204, 0)",
-						data: [],
-						fill: false,
-					}
 				]
 			},
 			options: {
+				responsive: true,
+				maintainAspectRatio: false,
 				scales: {
 					yAxes: [{
 						scaleLabel: {
@@ -61,7 +66,7 @@
 					xAxes: [{
 						scaleLabel: {
 							display: true,
-							labelString: 'Tempo (s)',
+							labelString: 'Frequência (Hz)',
 							type: 'time',
 						},
 					}]
@@ -69,46 +74,143 @@
 			}
 		});
 
-		let k = 0;
-
-		var { FFT } = require('dsp.js');
-		var fft = new FFT(128, 11);
-
-		function addData(chart, label, data, eixo) {
-			k++;
-			if(k == 3){
-				myChart.data.labels.push(label);
-				k = 0;
+		var ctxY = document.getElementById("myChartY").getContext("2d");
+		var myChartY = new Chart(ctxY, {
+			type: 'line',
+			data: {
+				labels: [],
+				datasets: [
+					{
+						label: ["Eixo Y"],
+						backgroundColor: "rgba(51, 204, 255)",
+						borderColor: "rgba(51, 204, 255)",
+						data: [],
+						fill: false,
+					},
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Aceleração (m/s²)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Frequência (Hz)',
+							type: 'time',
+						},
+					}]
+				}     
 			}
+		});
 
-			if (eixo == 'x'){
-				myChart.data.datasets[0].data.push(data);
-				if(myChart.data.datasets[0].data.length == 128) {
-					fft.forward(myChart.data.datasets[0].data);
-					const spectrum = fft.spectrum;
-					console.log('spectrum: ' + spectrum);
-				}
+		var ctxZ = document.getElementById("myChartZ").getContext("2d");
+		var myChartZ = new Chart(ctxZ, {
+			type: 'line',
+			data: {
+				labels: [],
+				datasets: [
+					{
+						label: ["Eixo Z"],
+						backgroundColor: "rgba(60,179,113)",
+						borderColor: "rgba(60,179,113)",
+						data: [],
+						fill: false,
+					},
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Aceleração (m/s²)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Frequência (Hz)',
+							type: 'time',
+						},
+					}]
+				}     
 			}
-			if (eixo == 'y'){
-				myChart.data.datasets[1].data.push(data);
-			}
-			if (eixo == 'z'){
-				myChart.data.datasets[2].data.push(data);
-			}	
+		});
+		
+		let arrayY = [];
+		let arrayX = [];
+		let arrayZ = [];
+		let arrayLabelX = [];
+		let arrayLabelY = [];
+		let arrayLabelZ = [];
 
-			myChart.update();
+		function addData(array, arrayLabel, label, data) {
+			arrayLabel.push(label);
+			array.push(data);
 		}
 
-		var inicio = Date.now();
+		function plotar() {
+			arrayX.shift();
+			arrayLabelX.shift();
+			myChart.data.labels = arrayLabelX;
+			myChart.data.datasets[0].data = arrayX;
+			myChart.update();
+			arrayX = [];
+			arrayLabelX = [];
+
+			arrayY.shift();
+			arrayLabelY.shift();
+			myChartY.data.labels = arrayLabelY;
+			myChartY.data.datasets[0].data = arrayY;
+			myChartY.update();
+			arrayY = [];
+			arrayLabelY = [];
+
+			arrayZ.shift();
+			arrayLabelZ.shift();
+			myChartZ.data.labels = arrayLabelZ;
+			myChartZ.data.datasets[0].data = arrayZ;
+			myChartZ.update();
+			arrayZ = [];
+			arrayLabelZ = [];
+		}
+
+		var frequencia = 0;
+		let cont = 0;
+
 
 		var socket = io();
 		socket.on("dadosArduino", function(dado) {	
 			const eixo = dado.substring(0,1);
-			const newDado = dado.substring(1);
-			let dadoTratado = (parseInt(newDado) / 16384) * 9.81;
-			if(dado != null){	
-				addData(myChart, (Date.now() - inicio)/1000, dadoTratado, eixo);
-			}		
+			const func = dado.substring(1,2);
+			const newDado = dado.substring(2);
+			if(eixo === 'f') {
+				frequencia = newDado;
+			}
+			if(func == 'p') {
+				console.log('peek: ' + newDado);
+			}
+			if(eixo == 'x') {
+				addData(arrayX, arrayLabelX, frequencia, newDado);
+			}	
+			if(eixo == 'y') {
+				addData(arrayY, arrayLabelY, frequencia, newDado);
+			}
+			if(eixo == 'z') {
+				addData(arrayZ, arrayLabelZ, frequencia, newDado);
+			}
+			if(eixo == '-') {
+				plotar();
+			}
 		});
 	</script>
  
