@@ -33,7 +33,31 @@
 			<div class="col graph">
 				<canvas id="myChartZ" width="300" height="200"></canvas>
 			</div>
-			<div class="col graph">Column</div>
+			<div class="col graph">
+				<div class="dados">
+					<h3>Controle</h3>
+					<button id="comeco" type="button" class="btn btn-dark" onclick="comecarTransmissao()">Começar</button><br>
+					<button id="parada" type="button" class="btn btn-dark" onclick="pararTransmissao()">Parar</button>
+				</div>
+
+				<div class="dados">
+					<h3>Dados</h3>
+					<h5>Pico Eixo X: <span id="picoX">0</span></h5>
+					<h5>Pico Eixo Y: <span id="picoY">0</span></h5>
+					<h5>Pico Eixo Z: <span id="picoZ">0</span></h5>
+				</div>
+
+				<div class="dados">
+					<h3>Media</h3>
+					<h5>Hz Eixo X: <span id="mediapicoX">0</span></h5>
+					<h5>Hz Eixo Y: <span id="mediapicoY">0</span></h5>
+					<h5>Hz Eixo Z: <span id="mediapicoZ">0</span></h5>
+				</div>
+
+				<div>
+					<span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>:<span id="millisecond">000</span>
+				</div>
+			</div>
 		</div>
 	</div>
 	
@@ -152,6 +176,9 @@
 		let arrayLabelX = [];
 		let arrayLabelY = [];
 		let arrayLabelZ = [];
+		let peekX = 0;
+		let peekY = 0;
+		let peekZ = 0;
 
 		function addData(array, arrayLabel, label, data) {
 			arrayLabel.push(label);
@@ -160,6 +187,8 @@
 
 		function plotar() {
 			arrayX.shift();
+			arrayX.shift();
+			arrayLabelX.shift();
 			arrayLabelX.shift();
 			myChart.data.labels = arrayLabelX;
 			myChart.data.datasets[0].data = arrayX;
@@ -168,6 +197,8 @@
 			arrayLabelX = [];
 
 			arrayY.shift();
+			arrayY.shift();
+			arrayLabelY.shift();
 			arrayLabelY.shift();
 			myChartY.data.labels = arrayLabelY;
 			myChartY.data.datasets[0].data = arrayY;
@@ -176,6 +207,8 @@
 			arrayLabelY = [];
 
 			arrayZ.shift();
+			arrayZ.shift();
+			arrayLabelZ.shift();
 			arrayLabelZ.shift();
 			myChartZ.data.labels = arrayLabelZ;
 			myChartZ.data.datasets[0].data = arrayZ;
@@ -189,30 +222,85 @@
 
 
 		var socket = io();
-		socket.on("dadosArduino", function(dado) {	
+		socket.on("dadosArduino", function(dado) {
+			console.log(dado);	
 			const eixo = dado.substring(0,1);
 			const func = dado.substring(1,2);
 			const newDado = dado.substring(2);
 			if(eixo === 'f') {
 				frequencia = newDado;
 			}
-			if(func == 'p') {
-				console.log('peek: ' + newDado);
-			}
-			if(eixo == 'x') {
-				addData(arrayX, arrayLabelX, frequencia, newDado);
+			else if(eixo == 'x') {
+				if(func == 'p') 
+					peekX = newDado;
+				if(func == 'a')
+					addData(arrayX, arrayLabelX, frequencia, newDado);
 			}	
-			if(eixo == 'y') {
-				addData(arrayY, arrayLabelY, frequencia, newDado);
+			else if(eixo == 'y') {
+				if(func == 'p') 
+					peekY = newDado;
+				if(func == 'a')
+					addData(arrayY, arrayLabelY, frequencia, newDado);
 			}
-			if(eixo == 'z') {
-				addData(arrayZ, arrayLabelZ, frequencia, newDado);
+			else if(eixo == 'z') {
+				if(func == 'p') 
+					peekZ = newDado;
+				if(func == 'a')
+					addData(arrayZ, arrayLabelZ, frequencia, newDado);
 			}
-			if(eixo == '-') {
+			else if(eixo == '-') {
 				plotar();
+				document.getElementById("picoX").innerHTML = peekX;
+				document.getElementById("picoY").innerHTML = peekY;
+				document.getElementById("picoZ").innerHTML = peekZ;
 			}
 		});
+
+
+
+		let hour = 0;
+		let minute = 0;
+		let second = 0;
+		let millisecond = 0;
+
+		let cron;
+
+		function pararTransmissao() {
+			socket.emit("parar");
+			document.getElementById('parada').disabled = true;
+			clearInterval(cron);
+		}
+
+		function comecarTransmissao() {
+			socket.emit("comecar");
+			document.getElementById('comeco').disabled = true;
+			clearInterval(cron);
+			cron = setInterval(() => { timer(); }, 10);
+		}
+
+		function timer() {
+			if ((millisecond += 10) == 1000) {
+				millisecond = 0;
+				second++;
+			}
+			if (second == 60) {
+				second = 0;
+				minute++;
+			}
+			if (minute == 60) {
+				minute = 0;
+				hour++;
+			}
+			document.getElementById('hour').innerText = returnData(hour);
+			document.getElementById('minute').innerText = returnData(minute);
+			document.getElementById('second').innerText = returnData(second);
+			document.getElementById('millisecond').innerText = returnData(millisecond);
+		}
+
+		function returnData(input) {
+			return input > 10 ? input : `0${input}`
+		}
+
 	</script>
- 
 </body>
 </html>

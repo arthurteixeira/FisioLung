@@ -24,32 +24,36 @@
  * Onde eu estou colocando "/dev/ttyACM8" você deve substituir essa informação pela sua porta 
  * serial, onde o seu Arduíno está conectado. 
  */
- const mySerial = new SerialPort('/dev/ttyACM0', {
+ const mySerial = new SerialPort('/dev/ttyACM1', {
  	baudRate : 38400,
  	parser : new SerialPort.parsers.Readline("\n")
  });
- 
-/**
- * mySerial.on - Verifiica conexão com o arduino e informa no console.
- */
+
+
  mySerial.on("open", function(){
- 	console.log("Arduino conexão estabelecida!");
- });
- 
-/**
- * mySerial.on -
- */
- mySerial.pipe(new StringStream) // pipe the stream to scramjet StringStream
- 	.lines('\n')                  // split per line
- 	.each(                        // send message per every line
-		data => io.sockets.emit('dadosArduino', data)
- 	);
+	console.log("Arduino conexão estabelecida!");
+});
+
 
 /**
  * io.on - Recebe conexão de cliente.
  */
  io.on("connection", function(socket){
- 	console.log("Usuário está conectádo!");
+	 console.log("Usuário está conectádo!");
+
+	 socket.on("comecar", () => {		
+		mySerial.pipe(new StringStream) // pipe the stream to scramjet StringStream
+		.lines('\n')                  // split per line
+		.each(                        // send message per every line
+		   data => io.sockets.emit('dadosArduino', data)
+		);
+     });
+
+	 socket.on("parar", () => {
+        mySerial.close(function (err) {
+			console.log('port closed', err);
+		});
+     });
  });
  
 /**
