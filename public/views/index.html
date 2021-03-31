@@ -180,6 +180,18 @@
 		let peekY = 0;
 		let peekZ = 0;
 
+		let somaPicoX = 0;
+		let somaPicoY = 0;
+		let somaPicoZ = 0;
+
+		let contPX = 0;
+		let contPY = 0;
+		let contPZ = 0;
+
+		let mediaX = 0;
+		let mediaY = 0;
+		let mediaZ = 0
+
 		function addData(array, arrayLabel, label, data) {
 			arrayLabel.push(label);
 			array.push(data);
@@ -226,25 +238,49 @@
 			console.log(dado);	
 			const eixo = dado.substring(0,1);
 			const func = dado.substring(1,2);
-			const newDado = dado.substring(2);
+			const newDado = parseFloat(dado.substring(2));
 			if(eixo === 'f') {
 				frequencia = newDado;
 			}
 			else if(eixo == 'x') {
-				if(func == 'p') 
+				if(func == 'p' && !isNaN(newDado)) {
 					peekX = newDado;
+					somaPicoX = somaPicoX + newDado;
+					contPX++;
+				}
+				if(func == 'p' && isNaN(newDado)) {
+					peekX = 0;
+					somaPicoX = somaPicoX + 0;
+					contPX++;
+				}
 				if(func == 'a')
 					addData(arrayX, arrayLabelX, frequencia, newDado);
 			}	
 			else if(eixo == 'y') {
-				if(func == 'p') 
+				if(func == 'p' && !isNaN(newDado)) {
 					peekY = newDado;
+					somaPicoY = somaPicoX + newDado;
+					contPY++;
+				}
+				if(func == 'p' && isNaN(newDado)) {
+					peekY = 0;
+					somaPicoY = somaPicoX + 0;
+					contPY++;
+				}
 				if(func == 'a')
 					addData(arrayY, arrayLabelY, frequencia, newDado);
 			}
 			else if(eixo == 'z') {
-				if(func == 'p') 
+				if(func == 'p' && !isNaN(newDado)) {
 					peekZ = newDado;
+					somaPicoZ = somaPicoX + newDado;
+					contPZ++;
+				}
+				if(func == 'p' && isNaN(newDado)) {
+					peekZ = 0;
+					somaPicoZ = somaPicoX + 0;
+					contPZ++;
+				}
 				if(func == 'a')
 					addData(arrayZ, arrayLabelZ, frequencia, newDado);
 			}
@@ -253,10 +289,14 @@
 				document.getElementById("picoX").innerHTML = peekX;
 				document.getElementById("picoY").innerHTML = peekY;
 				document.getElementById("picoZ").innerHTML = peekZ;
+				mediaX = somaPicoX/contPX;
+				mediaY = somaPicoY/contPY;
+				mediaZ = somaPicoZ/contPZ;
+				document.getElementById("mediapicoX").innerHTML = mediaX.toFixed(2);
+				document.getElementById("mediapicoY").innerHTML = mediaY.toFixed(2);
+				document.getElementById("mediapicoZ").innerHTML = mediaZ.toFixed(2);
 			}
 		});
-
-
 
 		let hour = 0;
 		let minute = 0;
