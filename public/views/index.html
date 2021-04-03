@@ -34,26 +34,32 @@
 				<canvas id="myChartZ" width="300" height="200"></canvas>
 			</div>
 			<div class="col graph">
-				<div class="dados">
-					<h3>Controle</h3>
-					<button id="comeco" type="button" class="btn btn-dark" onclick="comecarTransmissao()">Começar</button><br>
-					<button id="parada" type="button" class="btn btn-dark" onclick="pararTransmissao()">Parar</button>
+				<div class="d-flex justify-content-center">
+					<div class="dados">
+						<h3>Controle</h3>
+						<button id="comeco" type="button" class="btn btn-dark" onclick="comecarTransmissao()">Começar</button><br>
+						<button id="parada" type="button" class="btn btn-dark" onclick="pararTransmissao()">Parar</button>
+					</div>
+
+					<div class="dados">
+						<h3>Dados</h3>
+						<h5>Pico Eixo X: <span id="picoX">0</span></h5>
+						<h5>Pico Eixo Y: <span id="picoY">0</span></h5>
+						<h5>Pico Eixo Z: <span id="picoZ">0</span></h5>
+					</div>
+
+					<div class="dados">
+						<h3>Media</h3>
+						<h5>Hz Eixo X: <span id="mediapicoX">0</span></h5>
+						<h5>Hz Eixo Y: <span id="mediapicoY">0</span></h5>
+						<h5>Hz Eixo Z: <span id="mediapicoZ">0</span></h5>
+					</div>
 				</div>
 
-				<div class="dados">
-					<h3>Dados</h3>
-					<h5>Pico Eixo X: <span id="picoX">0</span></h5>
-					<h5>Pico Eixo Y: <span id="picoY">0</span></h5>
-					<h5>Pico Eixo Z: <span id="picoZ">0</span></h5>
+				<div class="d-flex justify-content-center">
+					<div id="estadoId" class="col estado">Estado</div>
 				</div>
-
-				<div class="dados">
-					<h3>Media</h3>
-					<h5>Hz Eixo X: <span id="mediapicoX">0</span></h5>
-					<h5>Hz Eixo Y: <span id="mediapicoY">0</span></h5>
-					<h5>Hz Eixo Z: <span id="mediapicoZ">0</span></h5>
-				</div>
-
+				
 				<div>
 					<span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>:<span id="millisecond">000</span>
 				</div>
@@ -295,6 +301,18 @@
 				document.getElementById("mediapicoX").innerHTML = mediaX.toFixed(2);
 				document.getElementById("mediapicoY").innerHTML = mediaY.toFixed(2);
 				document.getElementById("mediapicoZ").innerHTML = mediaZ.toFixed(2);
+				if((mediaZ > 0 && mediaZ < 12 && mediaX > 0 && mediaX < 12 && mediaY > 0 && mediaY < 12) || (mediaZ > 30 && mediaX > 30 && mediaY > 30)) {
+					document.getElementById('estadoId').style.backgroundColor = '#c73e3eee;';
+					document.getElementById('estadoId').style.color = 'white';
+				}
+				if((mediaZ >= 12 && mediaZ < 15 && mediaX >= 12 && mediaX < 15 && mediaY >= 12 && mediaY < 15) || (mediaZ > 24 && mediaX > 24 && mediaY > 24)) {
+					document.getElementById('estadoId').style.backgroundColor = 'yellow';
+					document.getElementById('estadoId').style.color = 'black';
+				}
+				if((mediaZ >= 15 && mediaZ <= 24 && mediaX >= 15 && mediaX <= 24 && mediaY >= 15 && mediaY <= 24)) {
+					document.getElementById('estadoId').style.backgroundColor = 'green';
+					document.getElementById('estadoId').style.color = 'white';
+				}
 			}
 		});
 
