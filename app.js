@@ -11,6 +11,8 @@
  const SerialPort = require("serialport");
  
  const { StringStream } = require('scramjet');
+
+ let CONEXAO = 0;
 /**
  * app.get - 
  */
@@ -41,16 +43,25 @@
  io.on("connection", function(socket){
 	 console.log("Usuário está conectádo!");
 
-	 socket.on("comecar", () => {		
-		mySerial.pipe(new StringStream) // pipe the stream to scramjet StringStream
-		.lines('\n')                  // split per line
-		.each(                        // send message per every line
-		   data => io.sockets.emit('dadosArduino', data)
-		);
+	 socket.on("comecar", () => {
+		if (CONEXAO === 0){		
+			mySerial.pipe(new StringStream) // pipe the stream to scramjet StringStream
+			.lines('\n')                  // split per line
+			.each(                        // send message per every line
+			data => io.sockets.emit('dadosArduino', data)
+			);
+			CONEXAO = 1;
+		}
+
+		else if (CONEXAO === 1) {
+			mySerial.resume(function (err) {
+				console.log('port closed', err);
+			});	
+		}
      });
 
 	 socket.on("parar", () => {
-        mySerial.close(function (err) {
+        mySerial.pause(function (err) {
 			console.log('port closed', err);
 		});
      });
