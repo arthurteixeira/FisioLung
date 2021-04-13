@@ -1,25 +1,44 @@
- // Express é um framework que permite cria app web com facilidade com node.js.
- const app = require("express")();
- const express = require("express");
- 
- // Na pasta public é onde colocaremos o arquivo Chart.js
- app.use(express.static(__dirname + '/public'));
- 
- const http = require("http").Server(app);
- const io = require("socket.io")(http);
- 
- const SerialPort = require("serialport");
- 
- const { StringStream } = require('scramjet');
+const express = require("express");
+const path = require('path');
+const SerialPort = require("serialport");
+const cors = require('cors');
+const morgan = require('morgan');
+const handlebars = require('express-handlebars');
 
- let CONEXAO = 0;
-/**
- * app.get - 
- */
- app.get("/", function(req, res){
- 	res.sendFile(__dirname + '/public/views/index.html');
- });
- 
+const { StringStream } = require('scramjet');
+let CONEXAO = 0;
+
+const app = require("express")();
+const http = require("http").Server(app); 
+const io = require("socket.io")(http);
+
+http.listen("3000", function(){
+	console.log("Servidor on-line em http://localhost:3000 - para sair Ctrl+C.");
+});
+app.disable('x-powered-by'); // afastar rotinas mais simples de varredura e ataques automatizados
+
+//Configurando o CORS
+app.use(cors());
+
+//Configurando pastas dos arquivos estáticos.
+app.use(express.static(__dirname + '/public'));
+
+//Configurando o Morgan
+app.use(morgan('dev'));
+
+app.use(express.urlencoded({extended:false}))
+app.use(express.json());
+
+app.engine('handlebars', handlebars({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+
+//Adquirindo as Rotas
+const index = require('./routes/index');
+
+//Configurando as Rotas
+app.use('/', index);
+
+
 /**
  * mySerial - cria uma porta serial para comunicação com o Arduíno, define a velocidade de 
  * comunicação e interpreta o pular linha.
@@ -66,10 +85,5 @@
 		});
      });
  });
- 
-/**
- * http.linten -  
- */
- http.listen("3000", function(){
- 	console.log("Servidor on-line em http://localhost:3000 - para sair Ctrl+C.");
- });
+
+ module.exports = app;

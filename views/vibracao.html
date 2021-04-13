@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE-edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Arduino Node.js</title>
+	
+	<!-- Socket.io - aqui chamamos nosso socket. -->
+	<script src="/socket.io/socket.io.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" type="text/css" href="/css/vibracao.css" media="screen" />
+	<!-- Chart - aqui chamamos nossa lib que gera o gráfico. -->
+	<script src="/js/Chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+</head>
+ 
+<body>
+	<!-- criamos um canvas e atribuímos um tamanho que será o gráfico. -->
+	<div class="principal">
+		<div class="row">
+			<div class="w-100"></div>
+			<div class="col graph">
+				<canvas id="myChart" width="300" height="200"></canvas>
+			</div>
+			<div class="col graph">
+				<canvas id="myChartY" width="300" height="200"></canvas>
+			</div>
+			<div class="w-100"></div>
+			<div class="col graph">
+				<canvas id="myChartZ" width="300" height="200"></canvas>
+			</div>
+			<div class="col graph">
+				<div class="d-flex justify-content-center">
+					<div class="dados">
+						<h3>Controle</h3>
+						<button id="comeco" type="button" class="btn btn-dark" onclick="comecarTransmissao()">Começar</button><br>
+						<button id="parada" type="button" class="btn btn-dark" onclick="pararTransmissao()">Parar</button>
+					</div>
+
+					<div class="dados">
+						<h3>Dados</h3>
+						<h5>Pico Eixo X: <span id="picoX">0</span></h5>
+						<h5>Pico Eixo Y: <span id="picoY">0</span></h5>
+						<h5>Pico Eixo Z: <span id="picoZ">0</span></h5>
+					</div>
+
+					<div class="dados">
+						<h3>Media</h3>
+						<h5>Hz Eixo X: <span id="mediapicoX">0</span></h5>
+						<h5>Hz Eixo Y: <span id="mediapicoY">0</span></h5>
+						<h5>Hz Eixo Z: <span id="mediapicoZ">0</span></h5>
+					</div>
+				</div>
+
+				<div class="d-flex justify-content-center">
+					<div id="estadoId" class="col estado">Estado</div>
+				</div>
+				
+				<div>
+					<span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>:<span id="millisecond">000</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		var ctx = document.getElementById("myChart").getContext("2d");
+		var myChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: [],
+				datasets: [
+					{
+						label: ["Eixo X"],
+						backgroundColor: "rgba(255, 99, 132)",
+						borderColor: "rgba(255, 99, 132)",
+						data: [],
+						fill: false,
+					},
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Aceleração (m/s²)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Frequência (Hz)',
+							type: 'time',
+						},
+					}]
+				}     
+			}
+		});
+
+		var ctxY = document.getElementById("myChartY").getContext("2d");
+		var myChartY = new Chart(ctxY, {
+			type: 'line',
+			data: {
+				labels: [],
+				datasets: [
+					{
+						label: ["Eixo Y"],
+						backgroundColor: "rgba(51, 204, 255)",
+						borderColor: "rgba(51, 204, 255)",
+						data: [],
+						fill: false,
+					},
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Aceleração (m/s²)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Frequência (Hz)',
+							type: 'time',
+						},
+					}]
+				}     
+			}
+		});
+
+		var ctxZ = document.getElementById("myChartZ").getContext("2d");
+		var myChartZ = new Chart(ctxZ, {
+			type: 'line',
+			data: {
+				labels: [],
+				datasets: [
+					{
+						label: ["Eixo Z"],
+						backgroundColor: "rgba(60,179,113)",
+						borderColor: "rgba(60,179,113)",
+						data: [],
+						fill: false,
+					},
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Aceleração (m/s²)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Frequência (Hz)',
+							type: 'time',
+						},
+					}]
+				}     
+			}
+		});
+		
+		let arrayY = [];
+		let arrayX = [];
+		let arrayZ = [];
+		let arrayLabelX = [];
+		let arrayLabelY = [];
+		let arrayLabelZ = [];
+		let peekX = 0;
+		let peekY = 0;
+		let peekZ = 0;
+
+		let somaPicoX = 0;
+		let somaPicoY = 0;
+		let somaPicoZ = 0;
+
+		let contPX = 0;
+		let contPY = 0;
+		let contPZ = 0;
+
+		let mediaX = 0;
+		let mediaY = 0;
+		let mediaZ = 0
+
+		function addData(array, arrayLabel, label, data) {
+			arrayLabel.push(label);
+			array.push(data);
+		}
+
+		function plotar() {
+			arrayX.shift();
+			arrayX.shift();
+			arrayLabelX.shift();
+			arrayLabelX.shift();
+			myChart.data.labels = arrayLabelX;
+			myChart.data.datasets[0].data = arrayX;
+			myChart.update();
+			arrayX = [];
+			arrayLabelX = [];
+
+			arrayY.shift();
+			arrayY.shift();
+			arrayLabelY.shift();
+			arrayLabelY.shift();
+			myChartY.data.labels = arrayLabelY;
+			myChartY.data.datasets[0].data = arrayY;
+			myChartY.update();
+			arrayY = [];
+			arrayLabelY = [];
+
+			arrayZ.shift();
+			arrayZ.shift();
+			arrayLabelZ.shift();
+			arrayLabelZ.shift();
+			myChartZ.data.labels = arrayLabelZ;
+			myChartZ.data.datasets[0].data = arrayZ;
+			myChartZ.update();
+			arrayZ = [];
+			arrayLabelZ = [];
+		}
+
+		var frequencia = 0;
+		let cont = 0;
+
+
+		var socket = io();
+		socket.on("dadosArduino", function(dado) {
+			const eixo = dado.substring(0,1);
+			const func = dado.substring(1,2);
+			const newDado = parseFloat(dado.substring(2));
+			if(eixo === 'f') {
+				frequencia = newDado;
+			}
+			else if(eixo == 'x') {
+				if(func == 'p' && !isNaN(newDado)) {
+					peekX = newDado;
+					somaPicoX = somaPicoX + newDado;
+					contPX++;
+				}
+				if(func == 'p' && isNaN(newDado)) {
+					peekX = 0;
+					somaPicoX = somaPicoX + 0;
+					contPX++;
+				}
+				if(func == 'a')
+					addData(arrayX, arrayLabelX, frequencia, newDado);
+			}	
+			else if(eixo == 'y') {
+				if(func == 'p' && !isNaN(newDado)) {
+					peekY = newDado;
+					somaPicoY = somaPicoX + newDado;
+					contPY++;
+				}
+				if(func == 'p' && isNaN(newDado)) {
+					peekY = 0;
+					somaPicoY = somaPicoX + 0;
+					contPY++;
+				}
+				if(func == 'a')
+					addData(arrayY, arrayLabelY, frequencia, newDado);
+			}
+			else if(eixo == 'z') {
+				if(func == 'p' && !isNaN(newDado)) {
+					peekZ = newDado;
+					somaPicoZ = somaPicoX + newDado;
+					contPZ++;
+				}
+				if(func == 'p' && isNaN(newDado)) {
+					peekZ = 0;
+					somaPicoZ = somaPicoX + 0;
+					contPZ++;
+				}
+				if(func == 'a')
+					addData(arrayZ, arrayLabelZ, frequencia, newDado);
+			}
+			else if(eixo == '-') {
+				plotar();
+				document.getElementById("picoX").innerHTML = peekX;
+				document.getElementById("picoY").innerHTML = peekY;
+				document.getElementById("picoZ").innerHTML = peekZ;
+				mediaX = somaPicoX/contPX;
+				mediaY = somaPicoY/contPY;
+				mediaZ = somaPicoZ/contPZ;
+				document.getElementById("mediapicoX").innerHTML = mediaX.toFixed(2);
+				document.getElementById("mediapicoY").innerHTML = mediaY.toFixed(2);
+				document.getElementById("mediapicoZ").innerHTML = mediaZ.toFixed(2);
+				if((mediaZ > 0 && mediaZ < 12 && mediaX > 0 && mediaX < 12 && mediaY > 0 && mediaY < 12) || (mediaZ > 30 && mediaX > 30 && mediaY > 30)) {
+					document.getElementById('estadoId').style.backgroundColor = '#c73e3eee;';
+					document.getElementById('estadoId').style.color = 'white';
+				}
+				if((mediaZ >= 12 && mediaZ < 15 && mediaX >= 12 && mediaX < 15 && mediaY >= 12 && mediaY < 15) || (mediaZ > 24 && mediaX > 24 && mediaY > 24)) {
+					document.getElementById('estadoId').style.backgroundColor = 'yellow';
+					document.getElementById('estadoId').style.color = 'black';
+				}
+				if((mediaZ >= 15 && mediaZ <= 24 && mediaX >= 15 && mediaX <= 24 && mediaY >= 15 && mediaY <= 24)) {
+					document.getElementById('estadoId').style.backgroundColor = 'green';
+					document.getElementById('estadoId').style.color = 'white';
+				}
+			}
+		});
+
+		let hour = 0;
+		let minute = 0;
+		let second = 0;
+		let millisecond = 0;
+
+		let cron;
+
+		function pararTransmissao() {
+			socket.emit("parar");
+			document.getElementById('parada').disabled = true;
+			clearInterval(cron);
+		}
+
+		function comecarTransmissao() {
+			socket.emit("comecar");
+			document.getElementById('comeco').disabled = true;
+			clearInterval(cron);
+			cron = setInterval(() => { timer(); }, 10);
+		}
+
+		function timer() {
+			if ((millisecond += 10) == 1000) {
+				millisecond = 0;
+				second++;
+			}
+			if (second == 60) {
+				second = 0;
+				minute++;
+			}
+			if (minute == 60) {
+				minute = 0;
+				hour++;
+			}
+			document.getElementById('hour').innerText = returnData(hour);
+			document.getElementById('minute').innerText = returnData(minute);
+			document.getElementById('second').innerText = returnData(second);
+			document.getElementById('millisecond').innerText = returnData(millisecond);
+		}
+
+		function returnData(input) {
+			return input > 10 ? input : `0${input}`
+		}
+
+	</script>
+</body>
+</html>

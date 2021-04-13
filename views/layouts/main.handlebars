@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<style>
+  .logout-item {
+    color: white;
+    margin-right: 25px;
+    font-size: 20px;
+  }
+  .logout-item:hover {
+    color: white;
+  }
+</style>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo</title>
+  <link rel="icon" type="imagem/png" href="/assets/syrena_store_logo_sem_letras_rosa.png">
+
+  <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/fontawesome/css/all.css">
+  <link rel="stylesheet" href="/css/menu_administrativo.css">
+  <script src="/js/jquery-3.4.1.slim.min.js"></script>
+  <script src="/js/bootstrap/bootstrap.min.js"></script>
+  <script src="/js/axios.js"></script>
+  <script src="/fontawesome/js/all.js"></script>
+
+
+
+</head>
+
+<body>
+
+  <header>
+
+    <!-- Barra Superior -->
+    <nav class="cor-navbar navbar navbar-expand-lg justify-content-between">
+      <div class="logo" style="display: flex;">
+        <a class="navbar-brand titulo" href="http://localhost:3000/" id="logo-brand">FisioLung</a>
+        <button class="btn botao-sidebar" id="menu-toggle"><i class="fas fa-bars"></i></button>
+      </div>
+      <a href="#" class="logout-item">
+        <i class="fas fa-sign-out-alt"></i> Sair</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <div class="d-flex" id="wrapper">
+
+      <!-- Barra Lateral -->
+      <div class=" border-right" id="sidebar-wrapper">
+
+        <div class="list-group list-group-flush">
+          <h5 style="margin-left: 5%; margin-top: 10%;"> <i class="fas fa-users"></i> Cadastros</h5>
+          <a href="/admin/colaboradores/compras" class="list-group-item item-barra list-group-item-action "
+            id="vendasDoDiaMenu">
+
+            <i class="fas fa-user-md"></i> Fisioterapeuta</a>
+          <a href="/admin/produtos/cadastrar" class="list-group-item item-barra list-group-item-action "
+            id="cadastrarProdutoMenu">
+            <i class="fas fa-user-alt"></i> Paciente</a>
+          <hr>
+          <h5 style="margin-left: 5%;"> <i class="fas fa-users"></i> Sessão</h5>
+          <a href="/admin/compraprodutos/itenscomprados" class="list-group-item item-barra list-group-item-action "
+            id="cadastrarCompraMenu">
+            <i class="fas fa-plus-square"></i> Registrar Sessão</a>
+
+          <a href="/admin/compraprodutos/listar/1" class="list-group-item item-barra list-group-item-action ">
+            <i class="fas fa-list"></i> Analisar Sessão</a>
+          <hr>
+          <h5 style="margin-left: 5%;"> <i class="far fa-file-alt"></i> Relatórios</h5>
+          <a href="/admin/relatorios" id="sidebar-borda-inferior" class="list-group-item item-barra list-group-item-action "
+            id="GerarRelatorios">
+            <i class="fas fa-file-alt"></i> Gerar Relatório</a>
+        </div>
+      </div>
+
+      <div id="page-content-wrapper">
+        <div class="error container" style="margin-top: 10px;"></div>
+        {{{body}}}
+      </div>
+
+  </main>
+</body>
+<script>
+  $("#menu-toggle").click(function (e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("toggled");
+  });
+  function listResponseMessage(type, data) {
+    if (type) {
+      return (
+        $('.error').append(`
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${data}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `)
+      )
+    }
+    else {
+      const arrayError = data.message.split('.')
+      arrayError.map(arrayError => {
+        return (
+          $('.error').append(`
+                       <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            ${arrayError}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `)
+        )
+      })
+    }
+  }
+</script>
+
+</html>
