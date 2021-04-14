@@ -1,0 +1,118 @@
+form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    margin-left: 15px;
+    margin-bottom: 0;
+}
+
+.top {
+    padding: 15px;
+    background-color: white;
+    display: flex;
+    flex-direction: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.campo {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.campo .campo_obrigatorio {
+    float: right;
+}
+
+.form-control {
+    padding: 0.18rem .75rem;
+}
+
+h2 {
+    color: #37bbf8;
+    text-emphasis: bold;
+}
+
+.row {
+    margin-bottom: 20px;
+}
+
+.row .col-md-2 button {
+    margin-top: 0;
+}
+
+.row .col-md-4 input {
+    width: 50vw;
+}
+
+.row .col-md-5 input {
+    width: 50vw;
+    padding: 0.19rem .75rem;
+}
+
+select {
+    margin: 0;
+    padding: 0;
+}
+
+.button {
+    margin-top: 28px;
+    transition: all 0.5s ease 0s;
+    background-color: #37bbf8;
+    border: #37bbf8;
+    height: 45px;
+}
+
+.button:hover {
+    transition: all 0.5s ease 0s;
+    background-color: #0a1355;
+    border: #0a1355;
+}
+
+.form-control:focus {
+    border-color: #37bbf8;
+    box-shadow: inset 0 1px 1px rgba(238, 81, 199, 0.075),
+        0 0 8px #37bbf8;
+}
+
+.custom-select:focus {
+    border-color: #37bbf8;
+    box-shadow: inset 0 1px 1px rgba(238, 81, 199, 0.075),
+        0 0 8px #37bbf8;
+}
+
+::selection {
+    color: white;
+    background: #37bbf8;
+}
+
+.custom-file-input {
+    background-color: #37bbf8;
+}
+
+@media (max-width: 769px) {
+    #page-content-wrapper {
+        width: 100%;
+    }
+
+    .row {
+        flex-direction: column;
+    }
+
+    .col {
+        margin: 5px 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .col-md-5 {
+        max-width: 100%;
+    }
+
+    .col-md-4 {
+        max-width: 100%;
+    }
+} 
