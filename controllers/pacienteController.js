@@ -1,7 +1,14 @@
+const { pacientes } = require('../models/');
+
 module.exports = {
     async create(req, res){
         const { name, cpf } = req.body;
-        console.log(name);
-        console.log(cpf)
+
+        const paciente = await pacientes.create({
+            name,
+            cpf,
+        });
+        
+        res.json(paciente);
     }
 };

@@ -1,0 +1,19 @@
+version: '3'
+
+networks: 
+  node-network:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:12.2-alpine
+    container_name: fisiolung
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    restart: always
+    volumes:
+      - $PWD/database/data:/var/lib/postgresql/data
+    networks:
+      - node-network
