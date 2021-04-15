@@ -2,6 +2,7 @@ const { Router } = require('express');
 const routes = Router();
 const fisioterapeutaController = require('../controllers/fisioterapeutaController');
 const pacienteController = require('../controllers/pacienteController');
+const sessaoController = require('../controllers/sessaoController');
 
 const { pacientes, fisioterapeutas } = require('../models/');
 
@@ -30,10 +31,6 @@ routes.get('/sessao', async (req,res) => {
     res.render('sessao', { pacientes: paciente, fisioterapeutas: fisioterapeuta });
 });
 
-//VIBRACAO
-routes.get('/sessao/vibracao', (req,res) => { 
-    //res.sendFile('vibracao.html', { root: './views' });
-    res.render('vibracao');
-});
+routes.post('/sessao', sessaoController.create);
 
 module.exports = routes;

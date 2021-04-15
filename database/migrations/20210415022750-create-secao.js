@@ -12,21 +12,31 @@ module.exports = {
       paciente_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: { model: "pacientes", key: "id" },
       },
       fisioterapeuta_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: { model: "fisioterapeutas", key: "id" },
       },
-      vibracao_pico: {
-        type: Sequelize.INTEGER,
+      vibracao_pico_x: {
+        type: Sequelize.ARRAY(Sequelize.FLOAT),
+        allowNull: false,
+      },
+      vibracao_pico_y: {
+        type: Sequelize.ARRAY(Sequelize.FLOAT),
+        allowNull: false,
+      },
+      vibracao_pico_z: {
+        type: Sequelize.ARRAY(Sequelize.FLOAT),
         allowNull: false,
       },
       vibracao_tempo: {
-        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        type: Sequelize.ARRAY(Sequelize.FLOAT),
         allowNull: false,
       },
       vibracao_tempo_total: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: false,
       },
       created_at: {
