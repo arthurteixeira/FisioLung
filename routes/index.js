@@ -3,6 +3,8 @@ const routes = Router();
 const fisioterapeutaController = require('../controllers/fisioterapeutaController');
 const pacienteController = require('../controllers/pacienteController');
 
+const { pacientes, fisioterapeutas } = require('../models/');
+
 routes.get('/', (req,res) => { 
     res.render('index');
 });
@@ -21,9 +23,17 @@ routes.get('/cadastro/paciente', (req,res) => {
 
 routes.post('/cadastro/paciente', pacienteController.create);
 
+//SESSAO
+routes.get('/sessao', async (req,res) => { 
+    const paciente = await pacientes.findAll();
+    const fisioterapeuta = await fisioterapeutas.findAll();
+    res.render('sessao', { pacientes: paciente, fisioterapeutas: fisioterapeuta });
+});
+
 //VIBRACAO
 routes.get('/sessao/vibracao', (req,res) => { 
-    res.sendFile('vibracao.html', { root: './views' });
+    //res.sendFile('vibracao.html', { root: './views' });
+    res.render('vibracao');
 });
 
 module.exports = routes;
