@@ -9,7 +9,13 @@ module.exports = (sequelize, DataTypes) => {
             vibracao_pico_y: DataTypes.ARRAY(DataTypes.FLOAT),
             vibracao_pico_z: DataTypes.ARRAY(DataTypes.FLOAT),
             vibracao_tempo: DataTypes.ARRAY(DataTypes.FLOAT),
-            vibracao_tempo_total: DataTypes.INTEGER,
+            vibracao_media_x: DataTypes.FLOAT,
+            vibracao_media_y: DataTypes.FLOAT,
+            vibracao_media_z: DataTypes.FLOAT,
+            vibracao_media_pico_x: DataTypes.ARRAY(DataTypes.FLOAT),
+            vibracao_media_pico_y: DataTypes.ARRAY(DataTypes.FLOAT),
+            vibracao_media_pico_z: DataTypes.ARRAY(DataTypes.FLOAT),
+            vibracao_tempo_total: DataTypes.FLOAT,
         },{
             sequelize
         }

@@ -35,6 +35,30 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.FLOAT),
         allowNull: false,
       },
+      vibracao_media_x: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+      },
+      vibracao_media_y: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+      },
+      vibracao_media_z: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+      },
+      vibracao_media_pico_x: {
+        type: Sequelize.ARRAY(Sequelize.FLOAT),
+        allowNull: false,
+      },
+      vibracao_media_pico_y: {
+        type: Sequelize.ARRAY(Sequelize.FLOAT),
+        allowNull: false,
+      },
+      vibracao_media_pico_z: {
+        type: Sequelize.ARRAY(Sequelize.FLOAT),
+        allowNull: false,
+      },
       vibracao_tempo_total: {
         type: Sequelize.FLOAT,
         allowNull: false,

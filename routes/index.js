@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const routes = Router();
+
 const fisioterapeutaController = require('../controllers/fisioterapeutaController');
 const pacienteController = require('../controllers/pacienteController');
 const sessaoController = require('../controllers/sessaoController');
 
-const { pacientes, fisioterapeutas } = require('../models/');
+const { pacientes, sessoes, fisioterapeutas } = require('../models/');
 
 routes.get('/', (req,res) => { 
     res.render('index');
@@ -32,5 +33,29 @@ routes.get('/sessao', async (req,res) => {
 });
 
 routes.post('/sessao', sessaoController.create);
+
+//ANALISE
+routes.get('/analise', async (req,res) => { 
+    const sessao = await sessoes.findAll({
+        include: [{
+            association: 'fisioterapeutas',
+            attributes: ['name'],
+        }, {
+            association: 'pacientes',
+            attributes: ['name'],
+        }],
+    });
+    res.render('analise', { sessoes: sessao });
+});
+
+routes.get('/analise/:id', async (req, res) => {
+    const { id } = req.params;
+    const sessao = await sessoes.findAll({
+        where: {
+            id,
+        }
+    });
+    res.render('analiseSessao', { sessoes: sessao });
+});
 
 module.exports = routes;

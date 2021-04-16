@@ -9,6 +9,12 @@ module.exports = {
             vibracao_pico_y,
             vibracao_pico_z,
             vibracao_tempo,
+            vibracao_media_x,
+            vibracao_media_y,
+            vibracao_media_z,
+            vibracao_media_pico_x,
+            vibracao_media_pico_y,
+            vibracao_media_pico_z,
             vibracao_tempo_total,
         } = req.body;
 
@@ -19,6 +25,12 @@ module.exports = {
             vibracao_pico_y,
             vibracao_pico_z,
             vibracao_tempo,
+            vibracao_media_x,
+            vibracao_media_y,
+            vibracao_media_z,
+            vibracao_media_pico_x,
+            vibracao_media_pico_y,
+            vibracao_media_pico_z,
             vibracao_tempo_total,
         });
         

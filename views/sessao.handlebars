@@ -244,6 +244,10 @@
         let vibracao_picoZ = [];
         let vibracao_tempo = [];
 
+		let vibracao_mediaX = [];
+		let vibracao_mediaY = [];
+		let vibracao_mediaZ = [];
+
 		let arrayY = [];
 		let arrayX = [];
 		let arrayZ = [];
@@ -369,6 +373,12 @@
 				mediaX = somaPicoX/contPX;
 				mediaY = somaPicoY/contPY;
 				mediaZ = somaPicoZ/contPZ;
+				if(!isNaN(mediaX))
+					vibracao_mediaX.push(mediaX);
+				if(!isNaN(mediaY))
+					vibracao_mediaY.push(mediaY);
+				if(!isNaN(mediaZ))
+					vibracao_mediaZ.push(mediaZ);
 				document.getElementById("mediapicoX").innerHTML = mediaX.toFixed(2);
 				document.getElementById("mediapicoY").innerHTML = mediaY.toFixed(2);
 				document.getElementById("mediapicoZ").innerHTML = mediaZ.toFixed(2);
@@ -445,6 +455,12 @@
                 vibracao_pico_y: vibracao_picoY,
                 vibracao_pico_z: vibracao_picoZ, 
                 vibracao_tempo: vibracao_tempo,
+				vibracao_media_x: mediaX,
+				vibracao_media_y: mediaY,
+				vibracao_media_z: mediaZ,
+				vibracao_media_pico_x: vibracao_mediaX,
+				vibracao_media_pico_y: vibracao_mediaY,
+				vibracao_media_pico_z: vibracao_mediaZ,
                 vibracao_tempo_total: tempoDeFim
              }),
         }).then(ref => {

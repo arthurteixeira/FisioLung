@@ -1,0 +1,146 @@
+<link rel="stylesheet" href="/css/cadastroFisioterapeuta.css" />
+<div class="top">
+    <h2>Análise da Sessão</h2>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+<script src="/js/Chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
+<div class="form">
+    {{#sessoes}}
+    <input type="hidden" name="picoX" id="picoX" value="{{dataValues.vibracao_pico_x}}" />
+    <input type="hidden" name="picoY" id="picoY" value="{{dataValues.vibracao_pico_y}}" />
+    <input type="hidden" name="picoZ" id="picoZ" value="{{dataValues.vibracao_pico_z}}" />
+    <input type="hidden" name="tempo" id="tempo" value="{{dataValues.vibracao_tempo}}" />
+    <input type="hidden" name="mediaPicoX" id="mediaPicoX" value="{{dataValues.vibracao_media_pico_x}}" />
+    <input type="hidden" name="mediaPicoY" id="mediaPicoY" value="{{dataValues.vibracao_media_pico_y}}" />
+    <input type="hidden" name="mediaPicoZ" id="mediaPicoZ" value="{{dataValues.vibracao_media_pico_z}}" />
+    <div class="w-100"></div>
+	<div class="col graph">
+		<canvas id="myChart" width="300" height="600"></canvas>
+	</div>
+    <div class="col graph">
+		<canvas id="myChart2" width="300" height="600"></canvas>
+	</div>
+    <div style="margin-left: 65px;">
+        <h3>Tempo da Sessão: {{dataValues.vibracao_tempo_total}} s</h3>
+        <h3>Média Pico Eixo X: {{dataValues.vibracao_media_x}} s</h3>
+        <h3>Média Pico Eixo Y: {{dataValues.vibracao_media_y}} s</h3>
+        <h3>Média Pico Eixo Z: {{dataValues.vibracao_media_z}} s</h3>
+    </div>
+    {{/sessoes}}
+</div>
+
+<script>
+        const picoX = JSON.parse("[" + document.getElementById("picoX").value + "]");
+        const picoY = JSON.parse("[" + document.getElementById("picoY").value + "]");
+        const picoZ = JSON.parse("[" + document.getElementById("picoZ").value + "]");
+        const tempo = JSON.parse("[" + document.getElementById("tempo").value + "]");
+        console.log(document.getElementById("mediaPicoX").value);
+        const mediaPicoX = JSON.parse("[" + document.getElementById("mediaPicoX").value + "]");
+        const mediaPicoY = JSON.parse("[" + document.getElementById("mediaPicoY").value + "]");
+        const mediaPicoZ = JSON.parse("[" + document.getElementById("mediaPicoZ").value + "]");
+
+        var ctx = document.getElementById("myChart").getContext("2d");
+		var myChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: tempo,
+				datasets: [
+					{
+						label: ["Eixo X"],
+						backgroundColor: "rgba(255, 99, 132)",
+						borderColor: "rgba(255, 99, 132)",
+						data: picoX,
+						fill: false,
+					},
+                    {
+						label: ["Eixo Y"],
+						backgroundColor: "rgba(51, 204, 255)",
+						borderColor: "rgba(51, 204, 255)",
+						data: picoY,
+						fill: false,
+					},
+                    {
+						label: ["Eixo Z"],
+						backgroundColor: "rgba(60,179,113)",
+						borderColor: "rgba(60,179,113)",
+						data: picoZ,
+						fill: false,
+					},
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Pico de Frequência (Hz)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Tempo (s)',
+							type: 'time',
+						},
+					}]
+				}     
+			}
+		});
+
+        var ctx2 = document.getElementById("myChart2").getContext("2d");
+		var myChart = new Chart(ctx2, {
+			type: 'line',
+			data: {
+				labels: tempo,
+				datasets: [
+					{
+						label: ["Eixo X"],
+						backgroundColor: "rgba(255, 99, 132)",
+						borderColor: "rgba(255, 99, 132)",
+						data: mediaPicoX,
+						fill: false,
+					},
+                    {
+						label: ["Eixo Y"],
+						backgroundColor: "rgba(51, 204, 255)",
+						borderColor: "rgba(51, 204, 255)",
+						data: mediaPicoY,
+						fill: false,
+					},
+                    {
+						label: ["Eixo Z"],
+						backgroundColor: "rgba(60,179,113)",
+						borderColor: "rgba(60,179,113)",
+						data: mediaPicoZ,
+						fill: false,
+					},
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Média do Pico de Frequência (Hz)'
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Tempo (s)',
+							type: 'time',
+						},
+					}]
+				}     
+			}
+		});
+</script>
