@@ -276,30 +276,30 @@
 		}
 
 		function plotar() {
-			arrayX.shift();
-			arrayX.shift();
-			arrayLabelX.shift();
-			arrayLabelX.shift();
+			//arrayX.shift();
+			//arrayX.shift();
+			//arrayLabelX.shift();
+			//arrayLabelX.shift();
 			myChart.data.labels = arrayLabelX;
 			myChart.data.datasets[0].data = arrayX;
 			myChart.update();
 			arrayX = [];
 			arrayLabelX = [];
 
-			arrayY.shift();
-			arrayY.shift();
-			arrayLabelY.shift();
-			arrayLabelY.shift();
+			//arrayY.shift();
+			//arrayY.shift();
+			//arrayLabelY.shift();
+			//arrayLabelY.shift();
 			myChartY.data.labels = arrayLabelY;
 			myChartY.data.datasets[0].data = arrayY;
 			myChartY.update();
 			arrayY = [];
 			arrayLabelY = [];
 
-			arrayZ.shift();
-			arrayZ.shift();
-			arrayLabelZ.shift();
-			arrayLabelZ.shift();
+			//arrayZ.shift();
+			//arrayZ.shift();
+			//arrayLabelZ.shift();
+			//arrayLabelZ.shift();
 			myChartZ.data.labels = arrayLabelZ;
 			myChartZ.data.datasets[0].data = arrayZ;
 			myChartZ.update();
@@ -320,7 +320,7 @@
 				frequencia = newDado;
 			}
 			else if(eixo == 'x') {
-				if(func == 'p' && !isNaN(newDado)) {
+				/*if(func == 'p' && !isNaN(newDado)) {
 					peekX = newDado;
 					somaPicoX = somaPicoX + newDado;
 					contPX++;
@@ -329,12 +329,12 @@
 					peekX = 0;
 					somaPicoX = somaPicoX + 0;
 					contPX++;
-				}
+				}*/
 				if(func == 'a')
 					addData(arrayX, arrayLabelX, frequencia, newDado);
 			}	
 			else if(eixo == 'y') {
-				if(func == 'p' && !isNaN(newDado)) {
+				/*if(func == 'p' && !isNaN(newDado)) {
 					peekY = newDado;
 					somaPicoY = somaPicoX + newDado;
 					contPY++;
@@ -343,12 +343,12 @@
 					peekY = 0;
 					somaPicoY = somaPicoX + 0;
 					contPY++;
-				}
+				}*/
 				if(func == 'a')
 					addData(arrayY, arrayLabelY, frequencia, newDado);
 			}
 			else if(eixo == 'z') {
-				if(func == 'p' && !isNaN(newDado)) {
+				/*if(func == 'p' && !isNaN(newDado)) {
 					peekZ = newDado;
 					somaPicoZ = somaPicoX + newDado;
 					contPZ++;
@@ -357,19 +357,43 @@
 					peekZ = 0;
 					somaPicoZ = somaPicoX + 0;
 					contPZ++;
-				}
+				}*/
 				if(func == 'a')
 					addData(arrayZ, arrayLabelZ, frequencia, newDado);
 			}
 			else if(eixo == '-') {
+				let valX = Math.max.apply(Math, arrayX);
+				let valY = Math.max.apply(Math, arrayY);
+				let valZ = Math.max.apply(Math, arrayZ);
+
+				let posX = arrayX.indexOf(valX);
+				let posY = arrayY.indexOf(valY);
+				let posZ = arrayZ.indexOf(valZ);
+				
+				let picX = arrayLabelX[posX];
+				let picY = arrayLabelY[posY];
+				let picZ = arrayLabelZ[posZ];
+
 				plotar();
-				document.getElementById("picoX").innerHTML = peekX;
-				document.getElementById("picoY").innerHTML = peekY;
-				document.getElementById("picoZ").innerHTML = peekZ;
+				
+				somaPicoX = somaPicoX + picX;
+				contPX++;
+
+				somaPicoY = somaPicoY + picY;
+				contPY++;
+
+				somaPicoZ = somaPicoZ + picZ;
+				contPZ++;
+
+				vibracao_picoX.push(picX);
+                vibracao_picoY.push(picY);
+                vibracao_picoZ.push(picZ);
+
+				document.getElementById("picoX").innerHTML = picX;
+				document.getElementById("picoY").innerHTML = picY;
+				document.getElementById("picoZ").innerHTML = picZ;
                 vibracao_tempo.push((Date.now() - tempoDeInicio)/1000);
-                vibracao_picoX.push(peekX);
-                vibracao_picoY.push(peekY);
-                vibracao_picoZ.push(peekZ);
+
 				mediaX = somaPicoX/contPX;
 				mediaY = somaPicoY/contPY;
 				mediaZ = somaPicoZ/contPZ;
