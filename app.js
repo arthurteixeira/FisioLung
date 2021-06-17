@@ -46,7 +46,7 @@ app.use('/', index);
  * serial, onde o seu Arduíno está conectado. 
  */
  const mySerial = new SerialPort('/dev/ttyACM0', {
- 	baudRate : 115200,
+ 	baudRate : 9600,
  	parser : new SerialPort.parsers.Readline("\n")
  });
 
