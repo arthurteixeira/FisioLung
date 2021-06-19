@@ -19,6 +19,10 @@ module.exports = {
         allowNull: false,
         references: { model: "fisioterapeutas", key: "id" },
       },
+      sensor: {
+        type: Sequelize.BOOLEAN, // true -> acelerometro, false -> vibracao
+        allowNull: true,
+      },
       vibracao_pico_x: {
         type: Sequelize.ARRAY(Sequelize.FLOAT),
         allowNull: true,

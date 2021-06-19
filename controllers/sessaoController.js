@@ -5,6 +5,7 @@ module.exports = {
         const { 
             paciente_id,
             fisioterapeuta_id,
+            sensor,
             vibracao_pico_x,
             vibracao_pico_y,
             vibracao_pico_z,
@@ -21,6 +22,7 @@ module.exports = {
         const sessao = await sessoes.create({
             paciente_id,
             fisioterapeuta_id,
+            sensor,
             vibracao_pico_x,
             vibracao_pico_y,
             vibracao_pico_z,

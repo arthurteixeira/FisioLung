@@ -45,7 +45,7 @@ app.use('/', index);
  * Onde eu estou colocando "/dev/ttyACM8" você deve substituir essa informação pela sua porta 
  * serial, onde o seu Arduíno está conectado. 
  */
- const mySerial = new SerialPort('/dev/ttyACM0', {
+ const mySerial = new SerialPort('COM4', {
  	baudRate : 9600,
  	parser : new SerialPort.parsers.Readline("\n")
  });

@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             paciente_id: DataTypes.INTEGER,
             fisioterapeuta_id: DataTypes.INTEGER,
+            sensor: DataTypes.BOOLEAN,
             vibracao_pico_x: DataTypes.ARRAY(DataTypes.FLOAT),
             vibracao_pico_y: DataTypes.ARRAY(DataTypes.FLOAT),
             vibracao_pico_z: DataTypes.ARRAY(DataTypes.FLOAT),
