@@ -5,6 +5,12 @@ module.exports = (sequelize, DataTypes) => {
         {
             name: DataTypes.STRING,
             cpf: DataTypes.INTEGER,
+            data_nascimento: DataTypes.DATE,
+            sexo: DataTypes.CHAR,
+            peso: DataTypes.INTEGER,
+            patologia: DataTypes.CHAR,
+            sus: DataTypes.INTEGER,
+            fone: DataTypes.INTEGER,
         },{
             sequelize
         }

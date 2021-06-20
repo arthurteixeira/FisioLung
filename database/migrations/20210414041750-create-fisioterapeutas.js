@@ -18,6 +18,22 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      data_nascimento: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      sexo: {
+        type: Sequelize.CHAR,
+        allowNull: true,
+      },
+      crefito: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      fone: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
