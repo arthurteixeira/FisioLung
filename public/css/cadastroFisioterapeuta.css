@@ -59,7 +59,7 @@ select {
 }
 
 .button {
-    margin-top: 28px;
+    margin-left: 15px;
     transition: all 0.5s ease 0s;
     background-color: #37bbf8;
     border: #37bbf8;

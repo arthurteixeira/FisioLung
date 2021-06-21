@@ -19,7 +19,7 @@ module.exports = {
         unique: true,
       },
       data_nascimento: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: true,
       },
       sexo: {
