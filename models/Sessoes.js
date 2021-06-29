@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             paciente_id: DataTypes.INTEGER,
             fisioterapeuta_id: DataTypes.INTEGER,
+            tecnica_id: DataTypes.INTEGER,
             sensor: DataTypes.BOOLEAN,
             vibracao_pico_x: DataTypes.ARRAY(DataTypes.FLOAT),
             vibracao_pico_y: DataTypes.ARRAY(DataTypes.FLOAT),
@@ -24,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     sessoes.associate = function (models) {
         sessoes.belongsTo(models.pacientes, { foreignKey: 'paciente_id', as: 'pacientes' });
         sessoes.belongsTo(models.fisioterapeutas, { foreignKey: 'fisioterapeuta_id', as: 'fisioterapeutas' });
+        sessoes.belongsTo(models.fisioterapeutas, { foreignKey: 'tecnica_id', as: 'tecnicas' });
     };
     
     return sessoes;

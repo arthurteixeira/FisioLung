@@ -5,7 +5,7 @@ const fisioterapeutaController = require('../controllers/fisioterapeutaControlle
 const pacienteController = require('../controllers/pacienteController');
 const sessaoController = require('../controllers/sessaoController');
 
-const { pacientes, sessoes, fisioterapeutas } = require('../models/');
+const { pacientes, sessoes, fisioterapeutas, tecnicas } = require('../models/');
 
 routes.get('/', (req,res) => { 
     res.render('index');
@@ -29,7 +29,8 @@ routes.post('/cadastro/paciente', pacienteController.create);
 routes.get('/sessao', async (req,res) => { 
     const paciente = await pacientes.findAll();
     const fisioterapeuta = await fisioterapeutas.findAll();
-    res.render('sessao', { pacientes: paciente, fisioterapeutas: fisioterapeuta });
+    const tecnica = await tecnicas.findAll();
+    res.render('sessao', { pacientes: paciente, fisioterapeutas: fisioterapeuta, tecnicas: tecnica });
 });
 
 routes.post('/sessao', sessaoController.create);
