@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const { sessoes } = require('../models/');
 
 module.exports = {
@@ -41,6 +44,33 @@ module.exports = {
             vibracao_tempo_total,
         });
         
+        const writeStream = fs.createWriteStream(path.resolve(__dirname, `../logs/sessao-${sessao.id}.txt`));
+
+        writeStream.write(`Id\n`);
+        writeStream.write(`${sessao.id}\n`);
+        writeStream.write(`Paciente\n`);
+        writeStream.write(`${paciente_id}\n`);
+        writeStream.write(`Fisioterapeuta\n`);
+        writeStream.write(`${fisioterapeuta_id}\n`);
+        console.log(sensor);
+        if(sensor === 'true') {
+            writeStream.write(`Vibracao X\n`);
+            vibracao_pico_x.forEach(value => writeStream.write(`${value}\n`));
+            writeStream.write(`Vibracao Y\n`);
+            vibracao_pico_y.forEach(value => writeStream.write(`${value}\n`));
+            writeStream.write(`Vibracao Z\n`);
+            vibracao_pico_z.forEach(value => writeStream.write(`${value}\n`));
+            
+        } else if (sensor === 'false'){
+            writeStream.write(`Vibracao\n`);
+            vibracao_pico_x.forEach(value => writeStream.write(`${value}\n`));
+        }
+
+        writeStream.write(`Tempo\n`);
+        vibracao_tempo.forEach(value => writeStream.write(`${value}\n`));
+
+        writeStream.end();
+
         res.json(sessao);
     }
 };
