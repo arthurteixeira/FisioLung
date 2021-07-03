@@ -28,6 +28,26 @@ module.exports = {
         type: Sequelize.BOOLEAN, // true -> acelerometro, false -> vibracao
         allowNull: true,
       },
+      freq_respiratoria_inicial: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      freq_cardiaca_inicial: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      sat_oxigenio_inicial: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      pressao_arterial_inicial: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      grau_inicial: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       vibracao_pico_x: {
         type: Sequelize.ARRAY(Sequelize.FLOAT),
         allowNull: true,

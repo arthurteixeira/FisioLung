@@ -116,3 +116,7 @@ select {
         max-width: 100%;
     }
 } 
+
+.form-check {
+    margin-left: 20px;
+}

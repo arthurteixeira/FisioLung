@@ -10,6 +10,11 @@ module.exports = {
             fisioterapeuta_id,
             tecnica_id,
             sensor,
+            freq_respiratoria_inicial, 
+			freq_cardiaca_inicial, 
+			sat_oxigenio_inicial, 
+			pressao_arterial_inicial, 
+			grau_inicial,
             vibracao_pico_x,
             vibracao_pico_y,
             vibracao_pico_z,
@@ -26,11 +31,28 @@ module.exports = {
         if (tecnica_id == 'null')
             tecnica_id = null;
 
+        if(freq_respiratoria_inicial == "")
+            freq_respiratoria_inicial = null;
+        
+        if(freq_cardiaca_inicial == "")
+            freq_cardiaca_inicial = null;
+        
+        if(sat_oxigenio_inicial == "")
+            sat_oxigenio_inicial = null;
+        
+        if(pressao_arterial_inicial == "")
+            pressao_arterial_inicial = null;
+
         const sessao = await sessoes.create({
             paciente_id,
             fisioterapeuta_id,
             tecnica_id,
             sensor,
+            freq_respiratoria_inicial, 
+			freq_cardiaca_inicial, 
+			sat_oxigenio_inicial, 
+			pressao_arterial_inicial, 
+			grau_inicial,
             vibracao_pico_x,
             vibracao_pico_y,
             vibracao_pico_z,
