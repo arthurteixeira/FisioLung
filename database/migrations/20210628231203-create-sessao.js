@@ -48,6 +48,26 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
+      freq_respiratoria_final: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      freq_cardiaca_final: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      sat_oxigenio_final: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      pressao_arterial_final: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      grau_final: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       vibracao_pico_x: {
         type: Sequelize.ARRAY(Sequelize.FLOAT),
         allowNull: true,

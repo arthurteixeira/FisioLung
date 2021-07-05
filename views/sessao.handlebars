@@ -168,10 +168,69 @@
 					<span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>:<span id="millisecond">000</span>
 				</div>
                 <div class="d-flex justify-content-center">
-					<button type="button" id="yesEncerrar" onClick="fimSessao()" class="btn btn-primary button">Encerrar Sessão</button>
+					<button type="button" onClick="pages()" class="btn btn-primary button">
+						Avançar
+					</button>
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<div id="formFinalCampos">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm">
+					<label for="freq_respiratoria_final">Frequência Respiratória</label>
+					<input name="freq_respiratoria_final" type="number" class="form-control" id="freq_respiratoria_final" placeholder="Digite a frequência respiratória" />
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="freq_cardiaca_final">Frequência Cardíaca</label>
+					<input name="freq_cardiaca_final" type="number" class="form-control" id="freq_cardiaca_final" placeholder="Digite a frequência cardíaca" />
+            	</div>
+				<div class="col-sm">
+					<label for="sat_oxigenio_final">Saturação do Oxigênio</label>
+					<input name="sat_oxigenio_final" type="number" class="form-control" id="sat_oxigenio_final" placeholder="Digite a saturação do oxigênio" />
+            	</div>
+				<div class="col-sm">
+					<label for="pressao_arterial_final">Pressão Arterial</label>
+					<input name="pressao_arterial_final" type="number" class="form-control" id="pressao_arterial_final" placeholder="Digite a pressão arterial" />
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="grau_final">Grau de Comprometimento Pulmonar</label>
+					<div class="row">
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefaultFinal" id="flexRadioDefaultFinal1" checked>
+							<label class="form-check-label" for="flexRadioDefaultFinal1">1</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefaultFinal" id="flexRadioDefaultFinal2">
+							<label class="form-check-label" for="flexRadioDefaultFinal2">2</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefaultFinal" id="flexRadioDefaultFinal3">
+							<label class="form-check-label" for="flexRadioDefaultFinal3">3</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefaultFinal" id="flexRadioDefaultFinal4">
+							<label class="form-check-label" for="flexRadioDefaultFinal4">4</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexRadioDefaultFinal" id="flexRadioDefaultFinal5">
+							<label class="form-check-label" for="flexRadioDefaultFinal5">5</label>
+						</div>
+					</div>
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<button type="button" id="yesEncerrar" onClick="fimSessao()" class="btn btn-primary button">Encerrar Sessão</button>
+				</div>
+			</div>
+		</div>   
 	</div>
 
 </div>
@@ -180,8 +239,10 @@
 
     let pagina = 0;
 
-    if(pagina == 0)
+    if(pagina == 0){
         document.getElementById("vibracaoDiv").style.display = "none";
+		document.getElementById("formFinalCampos").style.display = "none";
+	}
 
     function pages() {
         pagina++;
@@ -189,7 +250,14 @@
             document.getElementById("vibracaoDiv").style.display = "block";
             document.getElementById("formInicial").style.display = "none";
             document.getElementById("formInicialCampos").style.display = "none";
+			document.getElementById("formFinalCampos").style.display = "none";
         }
+		if (pagina == 2) {
+			document.getElementById("vibracaoDiv").style.display = "none";
+            document.getElementById("formInicial").style.display = "none";
+            document.getElementById("formInicialCampos").style.display = "none";
+			document.getElementById("formFinalCampos").style.display = "block";
+		}
     }
 
 </script>
@@ -545,6 +613,15 @@
   			}
 		}
 
+		let valor_grau2 = null;
+		var radios2 = document.getElementsByName('flexRadioDefaultFinal');
+		for (var i = 0, length = radios2.length; i < length; i++) {
+  			if (radios2[i].checked) {
+				valor_grau2 = i+1;
+				break;
+  			}
+		}
+
         fetch('/sessao', {
              method: 'POST',
              headers: { 'Content-type': 'application/json' },
@@ -558,6 +635,11 @@
 				sat_oxigenio_inicial: document.getElementById('sat_oxigenio_inicial').value, 
 				pressao_arterial_inicial: document.getElementById('pressao_arterial_inicial').value, 
 				grau_inicial: valor_grau,
+				freq_respiratoria_final: document.getElementById('freq_respiratoria_final').value,
+				freq_cardiaca_final: document.getElementById('sat_oxigenio_final').value, 
+				sat_oxigenio_final: document.getElementById('sat_oxigenio_final').value, 
+				pressao_arterial_final: document.getElementById('pressao_arterial_final').value, 
+				grau_final: valor_grau2,
                 vibracao_pico_x: vibracao_picoX,
                 vibracao_pico_y: vibracao_picoY,
                 vibracao_pico_z: vibracao_picoZ, 
