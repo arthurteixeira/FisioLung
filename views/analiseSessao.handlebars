@@ -20,18 +20,47 @@
     <input type="hidden" name="mediaPicoY" id="mediaPicoY" value="{{dataValues.vibracao_media_pico_y}}" />
     <input type="hidden" name="mediaPicoZ" id="mediaPicoZ" value="{{dataValues.vibracao_media_pico_z}}" />
     <div class="w-100"></div>
+	<div class="analise-bordas">
+		<div class="row">
+			<div class="col-sm analise">
+				<div>
+					<h4>Frequência da Sessão</h4>
+				</div>
+				<div>
+					<canvas id="myChart" width="200" height="600"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm analise">
+				<div>
+					<h4>Média de Frequência da Sessão</h4>
+				</div>
+				<div>
+					<canvas id="myChart2" width="200" height="600"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm analise">
+				<div>
+					<h4>Dados da sessão</h4>
+				</div>
+				<div style="margin-left: 10px">
+					Tempo da Sessão: {{dataValues.vibracao_tempo_total}} s<br>
+					Média Pico Eixo X: {{dataValues.vibracao_media_x}} Hz<br>
+					Média Pico Eixo Y: {{dataValues.vibracao_media_y}} Hz<br>
+					Média Pico Eixo Z: {{dataValues.vibracao_media_z}} Hz
+				</div>
+			</div>
+			
+		</div>
+	</div>
 	<div class="col graph">
-		<canvas id="myChart" width="300" height="600"></canvas>
 	</div>
     <div class="col graph">
-		<canvas id="myChart2" width="300" height="600"></canvas>
+		
 	</div>
-    <div style="margin-left: 65px;">
-        <h4>Tempo da Sessão: {{dataValues.vibracao_tempo_total}} s</h4>
-        <h4>Média Pico Eixo X: {{dataValues.vibracao_media_x}} Hz</h4>
-        <h4>Média Pico Eixo Y: {{dataValues.vibracao_media_y}} Hz</h4>
-        <h4>Média Pico Eixo Z: {{dataValues.vibracao_media_z}} Hz</h4>
-    </div>
     {{/sessoes}}
 </div>
 

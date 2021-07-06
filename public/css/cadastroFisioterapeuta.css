@@ -120,3 +120,15 @@ select {
 .form-check {
     margin-left: 20px;
 }
+
+.analise {
+    background-color: rgba(152, 231, 255, 0.082);
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 10px;
+}
+
+.analise-bordas {
+    margin-left: 50px;
+    margin-right: 50px;
+}
