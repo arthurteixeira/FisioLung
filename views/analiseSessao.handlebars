@@ -23,28 +23,66 @@
 	<input type="hidden" name="freqRespiratoriaFinal" id="freqRespiratoriaFinal" value="{{dataValues.freq_respiratoria_final}}" />
 	<input type="hidden" name="freqCardiacaInicial" id="freqCardiacaInicial" value="{{dataValues.freq_cardiaca_inicial}}" />
 	<input type="hidden" name="freqCardiacaFinal" id="freqCardiacaFinal" value="{{dataValues.freq_cardiaca_final}}" />
+	<input type="hidden" name="satOxigenioInicial" id="satOxigenioInicial" value="{{dataValues.sat_oxigenio_inicial}}" />
+	<input type="hidden" name="satOxigenioFinal" id="satOxigenioFinal" value="{{dataValues.sat_oxigenio_final}}" />
+	<input type="hidden" name="pressaoArterialInicial" id="pressaoArterialInicial" value="{{dataValues.pressao_arterial_inicial}}" />
+	<input type="hidden" name="pressaoArterialFinal" id="pressaoArterialFinal" value="{{dataValues.pressao_arterial_final}}" />
+	<input type="hidden" name="grauInicial" id="grauInicial" value="{{dataValues.grau_inicial}}" />
+	<input type="hidden" name="grauFinal" id="grauFinal" value="{{dataValues.grau_final}}" />
     <div class="w-100"></div>
 	<div class="analise-bordas">
 		
+		<div class="row" style="margin-bottom: 0px">
+			<div class="col-sm analise">
+				<h4>Sinais Vitais</h4>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-sm analise">
 				<div>
-					<h4>Frequência Respiratória</h4>
+					<h6>Frequência Respiratória</h6>
 				</div>
 				<div>
-					<canvas id="myChartFreqRes" width="200" height="60"></canvas>
+					<canvas id="myChartFreqRes" width="200" height="110"></canvas>
 				</div>
 			</div>
 			<div class="col-sm analise">
 				<div>
-					<h4>Frequência Cardíaca</h4>
+					<h6>Frequência Cardíaca</h6>
 				</div>
 				<div>
-					<canvas id="myChartFreqCard" width="200" height="60"></canvas>
+					<canvas id="myChartFreqCard" width="200" height="110"></canvas>
+				</div>
+			</div>
+			<div class="col-sm analise">
+				<div>
+					<h6>Saturação do Oxigênio</h6>
+				</div>
+				<div>
+					<canvas id="myChartSatOxigenio" width="200" height="110"></canvas>
+				</div>
+			</div>
+			<div class="col-sm analise">
+				<div>
+					<h6>Pressão Arterial</h6>
+				</div>
+				<div>
+					<canvas id="myChartPressaoArterial" width="200" height="110"></canvas>
+				</div>
+			</div>
+			<div class="col-sm analise">
+				<div>
+					<h6>Graú de Comprometimento Pulmonar</h6>
+				</div>
+				<div>
+					<canvas id="myChartGrau" width="200" height="110"></canvas>
 				</div>
 			</div>
 		</div>
 
+		<div class="row">
+			
+		</div>
 
 		<div class="row">
 			<div class="col-sm analise">
@@ -295,7 +333,7 @@
 	var myChartFreqCard = new Chart(ctxFreqCard, {
 		type: 'bar',
 		data: {
-			labels: ['Frequência Respiratória'],
+			labels: ['Frequência Cardíaca'],
 			datasets: [{
 				label: ['Inicial'],
 				data: fc_inicial_array,
@@ -305,6 +343,117 @@
 			},{
 				label: ['Final'],
 				data: fc_final_array,
+				backgroundColor: [
+					'rgba(0, 140, 255)'
+				],
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	});
+
+	let so_inicial = document.getElementById("satOxigenioInicial").value;
+	let so_final = document.getElementById("satOxigenioFinal").value;
+	let so_inicial_array = [];
+	let so_final_array = [];
+
+	so_inicial_array.push(so_inicial);
+	so_final_array.push(so_final);
+	so_final_array.push(0);
+
+	var ctxSatOxigenio = document.getElementById('myChartSatOxigenio');
+	var myChartSatOxigenio = new Chart(ctxSatOxigenio, {
+		type: 'bar',
+		data: {
+			labels: ['Saturação do Oxigênio'],
+			datasets: [{
+				label: ['Inicial'],
+				data: so_inicial_array,
+				backgroundColor: [
+					'rgba(255, 99, 132)'
+				],
+			},{
+				label: ['Final'],
+				data: so_final_array,
+				backgroundColor: [
+					'rgba(0, 140, 255)'
+				],
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	});
+
+	let pa_inicial = document.getElementById("pressaoArterialInicial").value;
+	let pa_final = document.getElementById("pressaoArterialFinal").value;
+	let pa_inicial_array = [];
+	let pa_final_array = [];
+
+	pa_inicial_array.push(pa_inicial);
+	pa_final_array.push(pa_final);
+	pa_final_array.push(0);
+
+	var ctxPressaoArterial = document.getElementById('myChartPressaoArterial');
+	var myChartPressaoArterial = new Chart(ctxPressaoArterial, {
+		type: 'bar',
+		data: {
+			labels: ['Pressão Arterial'],
+			datasets: [{
+				label: ['Inicial'],
+				data: pa_inicial_array,
+				backgroundColor: [
+					'rgba(255, 99, 132)'
+				],
+			},{
+				label: ['Final'],
+				data: pa_final_array,
+				backgroundColor: [
+					'rgba(0, 140, 255)'
+				],
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	});
+
+	let gc_inicial = document.getElementById("grauInicial").value;
+	let gc_final = document.getElementById("grauFinal").value;
+	let gc_inicial_array = [];
+	let gc_final_array = [];
+
+	gc_inicial_array.push(gc_inicial);
+	gc_final_array.push(gc_final);
+	gc_final_array.push(0);
+
+	var ctxGrau = document.getElementById('myChartGrau');
+	var myChartGrau = new Chart(ctxGrau, {
+		type: 'bar',
+		data: {
+			labels: ['Graú de Comprometimento'],
+			datasets: [{
+				label: ['Inicial'],
+				data: gc_inicial_array,
+				backgroundColor: [
+					'rgba(255, 99, 132)'
+				],
+			},{
+				label: ['Final'],
+				data: gc_final_array,
 				backgroundColor: [
 					'rgba(0, 140, 255)'
 				],
