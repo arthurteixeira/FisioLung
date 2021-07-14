@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="/css/cadastroFisioterapeuta.css" />
+<div class="top">
+    <h2>Análise de Sessões</h2>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+<script src="/js/Chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
+<div class="form">
+        <div class="w-100"></div>
+        <div class="analise-bordas">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Fisio</th>
+                    <th scope="col">FR Inicial</th>
+                    <th scope="col">FR Final</th>
+                    <th scope="col">FC Inicial</th>
+                    <th scope="col">FC Final</th>
+                    <th scope="col">SO Inicial</th>
+                    <th scope="col">SO Final</th>
+                    <th scope="col">PA Inicial</th>
+                    <th scope="col">PA Final</th>
+                    <th scope="col">GCP Inicial</th>
+                    <th scope="col">GCP Final</th>
+                    <th scope="col">Tempo (s)</th>
+                    <th scope="col">Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each sessa}}
+                    <tr>
+                    <th scope="row">{{dataValues.id}}</th>
+                    <td>{{dataValues.fisioterapeuta_id}}</td>
+                    <td>{{dataValues.freq_respiratoria_inicial}}</td>
+                    <td>{{dataValues.freq_respiratoria_final}}</td>
+                    <td>{{dataValues.freq_cardiaca_inicial}}</td>
+                    <td>{{dataValues.freq_cardiaca_final}}</td>
+                    <td>{{dataValues.sat_oxigenio_inicial}}</td>
+                    <td>{{dataValues.sat_oxigenio_final}}</td>
+                    <td>{{dataValues.pressao_arterial_inicial}}</td>
+                    <td>{{dataValues.pressao_arterial_final}}</td>
+                    <td>{{dataValues.grau_inicial}}</td>
+                    <td>{{dataValues.grau_final}}</td>
+                    <td>{{dataValues.vibracao_tempo_total}}</td>
+                    <td id="tabela{{dataValues.id}}"></td>
+                    </tr>
+                    <tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+</div>
+
+<script>    
+    const jsonSessoesPuro = "{{sessoes}}"
+    const jsonSessoes = jsonSessoesPuro.replace(/&quot;/g, '\"');
+    console.log(jsonSessoes);
+    const sessoes = JSON.parse(jsonSessoes);
+    console.log(sessoes);
+
+    for(let i = 0; i < sessoes.length; i++) {
+        let id = sessoes[i].id
+        let data = sessoes[i].createdAt;
+        var today = new Date(data);
+        var year = today.getFullYear();
+        var mes = today.getMonth()+1;
+        var dia = today.getDate();
+        var fecha =dia+"/"+mes+"/"+year;
+        document.getElementById(`tabela${id}`).innerText = fecha;
+    }
+</script>

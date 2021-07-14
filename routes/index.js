@@ -35,18 +35,44 @@ routes.get('/sessao', async (req,res) => {
 
 routes.post('/sessao', sessaoController.create);
 
-//ANALISE
-routes.get('/analise', async (req,res) => { 
+//ANALISE GERAL
+
+routes.get('/selecionar/paciente/geral', async (req, res) => {
+    const pc = await pacientes.findAll();
+    return res.render('analisePacienteGeral', { pacientes: pc });
+});
+
+routes.get('/selecionar/paciente/geral/:id', async (req, res) => {
+    const { id } = req.params;
     const sessao = await sessoes.findAll({
-        include: [{
-            association: 'fisioterapeutas',
-            attributes: ['name'],
-        }, {
-            association: 'pacientes',
-            attributes: ['name'],
-        }],
+        where: {
+            paciente_id: id,
+        }
     });
-    res.render('analise', { sessoes: sessao });
+
+    const paciente = await pacientes.findAll({
+        where: {
+            id,
+        }
+    });
+    return res.render('analiseGeral', { sessa: sessao, sessoes: JSON.stringify(sessao), pacientes: JSON.stringify(paciente) });
+});
+
+//ANALISE SESSAO
+
+routes.get('/selecionar/paciente', async (req, res) => {
+    const pc = await pacientes.findAll();
+    return res.render('analisePaciente', { pacientes: pc });
+});
+
+routes.get('/paciente/:id', async (req,res) => { 
+    const { id } = req.params;
+    const sessao = await sessoes.findAll({
+        where: {
+            paciente_id: id,
+        }
+    });
+    return res.render('analise', { sessoes: sessao });
 });
 
 routes.get('/analise/:id', async (req, res) => {
@@ -56,7 +82,7 @@ routes.get('/analise/:id', async (req, res) => {
             id,
         }
     });
-    res.render('analiseSessao', { sessoes: sessao });
+    return res.render('analiseSessao', { sessoes: sessao });
 });
 
 module.exports = routes;

@@ -18,10 +18,10 @@
     <form method="post">
         <div class="d-flex flex-column bd-highlight mb-3">
             <div class="p-2 bd-highlight">
-                <label class="my-1 mr-2" for="sessao_id">Selecionar Sessão</label>
+                <label class="my-1 mr-2" for="sessao_id">Selecionar Paciente</label>
                 <select name="sessao_id" class="custom-select my-1 mr-sm-2" id="sessao_id">
-                    {{#each sessoes}}
-                        <option value="{{dataValues.id}}">Nº: {{dataValues.id}} | Data: {{dataValues.createdAt}}</option>
+                    {{#each pacientes}}
+                        <option value="{{dataValues.id}}">{{dataValues.name}}</option>
                     {{/each}}
                 </select>
             </div>
@@ -29,7 +29,7 @@
         <div class="d-flex flex-column bd-highlight mb-3">
             <div class="p-2 bd-highlight">
                 <button type="button" onClick="iniciarAnalise()" class="btn btn-primary button">
-                    Prosseguir
+                    Iniciar
                 </button>
             </div>
         </div>
@@ -40,11 +40,11 @@
 
 function iniciarAnalise() {
         const id = document.getElementById('sessao_id').value;
-        fetch(`/analise/${id}`, {
+        fetch(`/paciente/${id}`, {
              method: 'POST',
              headers: { 'Content-type': 'application/json' },
         }).then(ref => {
-            window.location.href = `/analise/${id}`;
+            window.location.href = `/paciente/${id}`;
         });
     }
 

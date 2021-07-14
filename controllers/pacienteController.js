@@ -28,6 +28,6 @@ module.exports = {
             fone,
         });
         
-        res.json(paciente);
+        res.redirect('/');
     }
 };
