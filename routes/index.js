@@ -45,6 +45,11 @@ routes.get('/selecionar/paciente/geral', async (req, res) => {
 routes.get('/selecionar/paciente/geral/:id', async (req, res) => {
     const { id } = req.params;
     const sessao = await sessoes.findAll({
+        include: [{
+            association: 'fisioterapeutas',
+            attributes: ['name'],
+        }],
+
         where: {
             paciente_id: id,
         }

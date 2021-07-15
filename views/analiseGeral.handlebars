@@ -12,47 +12,62 @@
 <div class="form">
         <div class="w-100"></div>
         <div class="analise-bordas">
-            <table class="table">
-                <thead>
-                    <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Fisio</th>
-                    <th scope="col">FR Inicial</th>
-                    <th scope="col">FR Final</th>
-                    <th scope="col">FC Inicial</th>
-                    <th scope="col">FC Final</th>
-                    <th scope="col">SO Inicial</th>
-                    <th scope="col">SO Final</th>
-                    <th scope="col">PA Inicial</th>
-                    <th scope="col">PA Final</th>
-                    <th scope="col">GCP Inicial</th>
-                    <th scope="col">GCP Final</th>
-                    <th scope="col">Tempo (s)</th>
-                    <th scope="col">Data</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each sessa}}
-                    <tr>
-                    <th scope="row">{{dataValues.id}}</th>
-                    <td>{{dataValues.fisioterapeuta_id}}</td>
-                    <td>{{dataValues.freq_respiratoria_inicial}}</td>
-                    <td>{{dataValues.freq_respiratoria_final}}</td>
-                    <td>{{dataValues.freq_cardiaca_inicial}}</td>
-                    <td>{{dataValues.freq_cardiaca_final}}</td>
-                    <td>{{dataValues.sat_oxigenio_inicial}}</td>
-                    <td>{{dataValues.sat_oxigenio_final}}</td>
-                    <td>{{dataValues.pressao_arterial_inicial}}</td>
-                    <td>{{dataValues.pressao_arterial_final}}</td>
-                    <td>{{dataValues.grau_inicial}}</td>
-                    <td>{{dataValues.grau_final}}</td>
-                    <td>{{dataValues.vibracao_tempo_total}}</td>
-                    <td id="tabela{{dataValues.id}}"></td>
-                    </tr>
-                    <tr>
-                    {{/each}}
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-sm analise">
+                    <div>
+                        <h4>Frequência Respiratória</h4>
+                    </div>
+                    <div>
+                        <canvas id="myChartFreqRes" width="200" height="300"></canvas>
+                    </div>div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm analise">
+                    <h4>Tabela Geral das Sessões</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Fisio</th>
+                            <th scope="col">FR Inicial</th>
+                            <th scope="col">FR Final</th>
+                            <th scope="col">FC Inicial</th>
+                            <th scope="col">FC Final</th>
+                            <th scope="col">SO Inicial</th>
+                            <th scope="col">SO Final</th>
+                            <th scope="col">PA Inicial</th>
+                            <th scope="col">PA Final</th>
+                            <th scope="col">GCP Inicial</th>
+                            <th scope="col">GCP Final</th>
+                            <th scope="col">Tempo (s)</th>
+                            <th scope="col">Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each sessa}}
+                            <tr>
+                            <th scope="row">{{dataValues.id}}</th>
+                            <td>{{dataValues.fisioterapeutas.dataValues.name}}</td>
+                            <td>{{dataValues.freq_respiratoria_inicial}}</td>
+                            <td>{{dataValues.freq_respiratoria_final}}</td>
+                            <td>{{dataValues.freq_cardiaca_inicial}}</td>
+                            <td>{{dataValues.freq_cardiaca_final}}</td>
+                            <td>{{dataValues.sat_oxigenio_inicial}}</td>
+                            <td>{{dataValues.sat_oxigenio_final}}</td>
+                            <td>{{dataValues.pressao_arterial_inicial}}</td>
+                            <td>{{dataValues.pressao_arterial_final}}</td>
+                            <td>{{dataValues.grau_inicial}}</td>
+                            <td>{{dataValues.grau_final}}</td>
+                            <td>{{dataValues.vibracao_tempo_total}}</td>
+                            <td id="tabela{{dataValues.id}}"></td>
+                            </tr>
+                            <tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 </div>
 
@@ -73,4 +88,74 @@
         var fecha =dia+"/"+mes+"/"+year;
         document.getElementById(`tabela${id}`).innerText = fecha;
     }
+
+    let fr_inicial_array = [];
+	let fr_final_array = [];
+    let numberSessao = [];
+
+    for(let i = 0; i < sessoes.length; i++) {
+        let z = i+1;
+        let sessao = 'Sessão ' + z
+        numberSessao.push(sessao)
+        if(sessoes[i].freq_respiratoria_inicial == null){
+            fr_inicial_array.push(0);
+        }else{
+            fr_inicial_array.push(sessoes[i].freq_respiratoria_inicial);
+        }
+
+        if(sessoes[i].freq_respiratoria_final == null){
+            fr_final_array.push(0);
+        }else{
+            fr_final_array.push(sessoes[i].freq_respiratoria_final);
+        }
+    } 
+
+
+
+    var ctxFreqRes = document.getElementById('myChartFreqRes').getContext("2d");
+			var myChartFreqRes = new Chart(ctxFreqRes, {
+				type: 'line',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Inicial"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: fr_inicial_array,
+							fill: false,
+						},
+                        {
+							label: ["Final"],
+							backgroundColor: "rgba(0, 140, 255)",
+							borderColor: "rgba(0, 140, 255)",
+							data: fr_final_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Frequência Respiratória'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+
 </script>
