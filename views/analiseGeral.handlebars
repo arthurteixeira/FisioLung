@@ -12,6 +12,69 @@
 <div class="form">
         <div class="w-100"></div>
         <div class="analise-bordas">
+            {{#pac}}
+            <div class="row">
+                <div class="col-sm analise">
+                    <div>
+                        <h5>Dados do Paciente</h5>
+                    </div>
+                    <div>
+                        <h6>Nome: {{dataValues.name}}</h6>
+                        <h6>Sexo: {{dataValues.sexo}}</h6>
+                        <h6>Peso: {{dataValues.peso}}</h6>
+                        <h6>Patologia: {{dataValues.patologia}}</h6>
+                    </div>
+                </div>
+            </div>
+            {{/pac}}
+            <div class="row">
+                <div class="col-sm analise">
+                    <h6>Tabela Geral das Sessões</h6>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Fisio</th>
+                            <th scope="col">FR Inicial</th>
+                            <th scope="col">FR Final</th>
+                            <th scope="col">FC Inicial</th>
+                            <th scope="col">FC Final</th>
+                            <th scope="col">SO Inicial</th>
+                            <th scope="col">SO Final</th>
+                            <th scope="col">PA Inicial</th>
+                            <th scope="col">PA Final</th>
+                            <th scope="col">GCP Inicial</th>
+                            <th scope="col">GCP Final</th>
+                            <th scope="col">Tempo (s)</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Sessão</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each sessa}}
+                            <tr>
+                            <th scope="row">{{dataValues.id}}</th>
+                            <td>{{dataValues.fisioterapeutas.dataValues.name}}</td>
+                            <td>{{dataValues.freq_respiratoria_inicial}}</td>
+                            <td>{{dataValues.freq_respiratoria_final}}</td>
+                            <td>{{dataValues.freq_cardiaca_inicial}}</td>
+                            <td>{{dataValues.freq_cardiaca_final}}</td>
+                            <td>{{dataValues.sat_oxigenio_inicial}}</td>
+                            <td>{{dataValues.sat_oxigenio_final}}</td>
+                            <td>{{dataValues.pressao_arterial_inicial}}</td>
+                            <td>{{dataValues.pressao_arterial_final}}</td>
+                            <td>{{dataValues.grau_inicial}}</td>
+                            <td>{{dataValues.grau_final}}</td>
+                            <td>{{dataValues.vibracao_tempo_total}}</td>
+                            <td id="tabela{{dataValues.id}}"></td>
+                            <td> <a href="/analise/{{dataValues.id}}">Acessar</a> </td>
+                            </tr>
+                            <tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm analise">
                     <div>
@@ -60,52 +123,6 @@
                     <div>
                         <canvas id="myChartGrau" width="200" height="300"></canvas>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm analise">
-                    <h6>Tabela Geral das Sessões</h6>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Fisio</th>
-                            <th scope="col">FR Inicial</th>
-                            <th scope="col">FR Final</th>
-                            <th scope="col">FC Inicial</th>
-                            <th scope="col">FC Final</th>
-                            <th scope="col">SO Inicial</th>
-                            <th scope="col">SO Final</th>
-                            <th scope="col">PA Inicial</th>
-                            <th scope="col">PA Final</th>
-                            <th scope="col">GCP Inicial</th>
-                            <th scope="col">GCP Final</th>
-                            <th scope="col">Tempo (s)</th>
-                            <th scope="col">Data</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each sessa}}
-                            <tr>
-                            <th scope="row">{{dataValues.id}}</th>
-                            <td>{{dataValues.fisioterapeutas.dataValues.name}}</td>
-                            <td>{{dataValues.freq_respiratoria_inicial}}</td>
-                            <td>{{dataValues.freq_respiratoria_final}}</td>
-                            <td>{{dataValues.freq_cardiaca_inicial}}</td>
-                            <td>{{dataValues.freq_cardiaca_final}}</td>
-                            <td>{{dataValues.sat_oxigenio_inicial}}</td>
-                            <td>{{dataValues.sat_oxigenio_final}}</td>
-                            <td>{{dataValues.pressao_arterial_inicial}}</td>
-                            <td>{{dataValues.pressao_arterial_final}}</td>
-                            <td>{{dataValues.grau_inicial}}</td>
-                            <td>{{dataValues.grau_final}}</td>
-                            <td>{{dataValues.vibracao_tempo_total}}</td>
-                            <td id="tabela{{dataValues.id}}"></td>
-                            </tr>
-                            <tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -436,7 +453,7 @@
 							scaleLabel: {
 								display: true,
 								labelString: 'Sessão',
-								type: 'time',
+								type: 'time',   
 							},
 						}]
 					}     

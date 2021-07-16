@@ -60,7 +60,7 @@ routes.get('/selecionar/paciente/geral/:id', async (req, res) => {
             id,
         }
     });
-    return res.render('analiseGeral', { sessa: sessao, sessoes: JSON.stringify(sessao), pacientes: JSON.stringify(paciente) });
+    return res.render('analiseGeral', { sessa: sessao, pac: paciente, sessoes: JSON.stringify(sessao), pacientes: JSON.stringify(paciente) });
 });
 
 //ANALISE SESSAO
