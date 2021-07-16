@@ -15,16 +15,56 @@
             <div class="row">
                 <div class="col-sm analise">
                     <div>
-                        <h4>Frequência Respiratória</h4>
+                        <h6>Frequência Respiratória</h6>
                     </div>
                     <div>
                         <canvas id="myChartFreqRes" width="200" height="300"></canvas>
-                    </div>div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm analise">
-                    <h4>Tabela Geral das Sessões</h4>
+                    <div>
+                        <h6>Frequência Cardíaca</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartFreqCard" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm analise">
+                    <div>
+                        <h6>Saturação do Oxigênio</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartSatOxigenio" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm analise">
+                    <div>
+                        <h6>Pressão Arterial</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartPressaoArterial" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm analise">
+                    <div>
+                        <h6>Graú de Comprometimento Pulmonar</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartGrau" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm analise">
+                    <h6>Tabela Geral das Sessões</h6>
                     <table class="table">
                         <thead>
                             <tr>
@@ -91,6 +131,19 @@
 
     let fr_inicial_array = [];
 	let fr_final_array = [];
+
+    let fc_inicial_array = [];
+	let fc_final_array = [];
+
+    let so_inicial_array = [];
+	let so_final_array = [];
+
+    let pa_inicial_array = [];
+	let pa_final_array = [];
+
+    let gc_inicial_array = [];
+	let gc_final_array = [];
+
     let numberSessao = [];
 
     for(let i = 0; i < sessoes.length; i++) {
@@ -107,6 +160,54 @@
             fr_final_array.push(0);
         }else{
             fr_final_array.push(sessoes[i].freq_respiratoria_final);
+        }
+
+        if(sessoes[i].freq_cardiaca_inicial == null){
+            fc_inicial_array.push(0);
+        }else{
+            fc_inicial_array.push(sessoes[i].freq_cardiaca_inicial);
+        }
+
+        if(sessoes[i].freq_respiratoria_final == null){
+            fc_final_array.push(0);
+        }else{
+            fc_final_array.push(sessoes[i].freq_cardiaca_final);
+        }
+
+        if(sessoes[i].sat_oxigenio_inicial == null){
+            so_inicial_array.push(0);
+        }else{
+            so_inicial_array.push(sessoes[i].sat_oxigenio_inicial);
+        }
+
+        if(sessoes[i].sat_oxigenio_final == null){
+            so_final_array.push(0);
+        }else{
+            so_final_array.push(sessoes[i].sat_oxigenio_final);
+        }
+
+        if(sessoes[i].pressao_arterial_inicial == null){
+            pa_inicial_array.push(0);
+        }else{
+            pa_inicial_array.push(sessoes[i].pressao_arterial_inicial);
+        }
+
+        if(sessoes[i].pressao_arterial_final == null){
+            pa_final_array.push(0);
+        }else{
+            pa_final_array.push(sessoes[i].pressao_arterial_final);
+        }
+
+        if(sessoes[i].grau_inicial == null){
+            gc_inicial_array.push(0);
+        }else{
+            gc_inicial_array.push(sessoes[i].grau_inicial);
+        }
+
+        if(sessoes[i].grau_final == null){
+            gc_final_array.push(0);
+        }else{
+            gc_final_array.push(sessoes[i].grau_final);
         }
     } 
 
@@ -145,6 +246,190 @@
 							scaleLabel: {
 								display: true,
 								labelString: 'Frequência Respiratória'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+
+    var ctxFreqCard = document.getElementById('myChartFreqCard').getContext("2d");
+			var myChartFreqCard = new Chart(ctxFreqCard, {
+				type: 'line',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Inicial"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: fc_inicial_array,
+							fill: false,
+						},
+                        {
+							label: ["Final"],
+							backgroundColor: "rgba(0, 140, 255)",
+							borderColor: "rgba(0, 140, 255)",
+							data: fc_final_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Frequência Cardíaca'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+
+    var ctxSatOxigenio = document.getElementById('myChartSatOxigenio').getContext("2d");
+			var myChartSatOxigenio = new Chart(ctxSatOxigenio, {
+				type: 'line',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Inicial"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: so_inicial_array,
+							fill: false,
+						},
+                        {
+							label: ["Final"],
+							backgroundColor: "rgba(0, 140, 255)",
+							borderColor: "rgba(0, 140, 255)",
+							data: so_final_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Saturação do Oxigênio'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+
+    var ctxPressaoArterial = document.getElementById('myChartPressaoArterial').getContext("2d");
+			var myChartPressaoArterial = new Chart(ctxPressaoArterial, {
+				type: 'line',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Inicial"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: pa_inicial_array,
+							fill: false,
+						},
+                        {
+							label: ["Final"],
+							backgroundColor: "rgba(0, 140, 255)",
+							borderColor: "rgba(0, 140, 255)",
+							data: pa_final_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Pressão Arterial'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+
+    var ctxGrau = document.getElementById('myChartGrau').getContext("2d");
+			var myChartGrau = new Chart(ctxGrau, {
+				type: 'line',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Inicial"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: gc_inicial_array,
+							fill: false,
+						},
+                        {
+							label: ["Final"],
+							backgroundColor: "rgba(0, 140, 255)",
+							borderColor: "rgba(0, 140, 255)",
+							data: gc_final_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Grau de Comprometimento Pulmonar'
 							}
 						}],
 						xAxes: [{
