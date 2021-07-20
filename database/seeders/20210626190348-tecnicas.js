@@ -6,6 +6,12 @@ module.exports = {
             "tecnicas",
             [
                 {
+                  nome: "Vibração Torácica",
+                  modo: "Técnica Não Invasiva",  
+                  created_at: "07/19/2021 23:06",
+                  updated_at: "07/19/2021 23:06",
+               },
+                {
                   nome: "Drenagem Postural",
                   modo: "Técnica Não Invasiva",  
                   created_at: "06/25/2021 16:58",
