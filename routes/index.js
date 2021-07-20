@@ -4,6 +4,7 @@ const routes = Router();
 const fisioterapeutaController = require('../controllers/fisioterapeutaController');
 const pacienteController = require('../controllers/pacienteController');
 const sessaoController = require('../controllers/sessaoController');
+const relatoriosController = require('../controllers/relatoriosController');
 
 const { pacientes, sessoes, fisioterapeutas, tecnicas } = require('../models/');
 
@@ -89,5 +90,8 @@ routes.get('/analise/:id', async (req, res) => {
     });
     return res.render('analiseSessao', { sessoes: sessao });
 });
+
+routes.get('/relatorio/html/:id', relatoriosController.analiseSessao);
+routes.get('/relatorio/pdf/:id', relatoriosController.analiseSessaoPDF);
 
 module.exports = routes;

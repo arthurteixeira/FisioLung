@@ -1,0 +1,473 @@
+<link rel="stylesheet" href="/css/cadastroFisioterapeuta.css" />
+<div class="top">
+    <h2>Análise da Sessão</h2>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+<script src="/js/Chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
+<div class="form">
+    <div style="display: flex; justify-content: right; align-items: center; margin-right: 50px">
+        <h4>Gerado em: {{data}}</h4>
+    </div>
+    {{#sessoes}}
+    <input type="hidden" name="picoX" id="picoX" value="{{dataValues.vibracao_pico_x}}" />
+    <input type="hidden" name="picoY" id="picoY" value="{{dataValues.vibracao_pico_y}}" />
+    <input type="hidden" name="picoZ" id="picoZ" value="{{dataValues.vibracao_pico_z}}" />
+	<input type="hidden" name="sensor" id="sensor" value="{{dataValues.sensor}}" />
+    <input type="hidden" name="tempo" id="tempo" value="{{dataValues.vibracao_tempo}}" />
+    <input type="hidden" name="mediaPicoX" id="mediaPicoX" value="{{dataValues.vibracao_media_pico_x}}" />
+    <input type="hidden" name="mediaPicoY" id="mediaPicoY" value="{{dataValues.vibracao_media_pico_y}}" />
+    <input type="hidden" name="mediaPicoZ" id="mediaPicoZ" value="{{dataValues.vibracao_media_pico_z}}" />
+	<input type="hidden" name="freqRespiratoriaInicial" id="freqRespiratoriaInicial" value="{{dataValues.freq_respiratoria_inicial}}" />
+	<input type="hidden" name="freqRespiratoriaFinal" id="freqRespiratoriaFinal" value="{{dataValues.freq_respiratoria_final}}" />
+	<input type="hidden" name="freqCardiacaInicial" id="freqCardiacaInicial" value="{{dataValues.freq_cardiaca_inicial}}" />
+	<input type="hidden" name="freqCardiacaFinal" id="freqCardiacaFinal" value="{{dataValues.freq_cardiaca_final}}" />
+	<input type="hidden" name="satOxigenioInicial" id="satOxigenioInicial" value="{{dataValues.sat_oxigenio_inicial}}" />
+	<input type="hidden" name="satOxigenioFinal" id="satOxigenioFinal" value="{{dataValues.sat_oxigenio_final}}" />
+	<input type="hidden" name="pressaoArterialInicial" id="pressaoArterialInicial" value="{{dataValues.pressao_arterial_inicial}}" />
+	<input type="hidden" name="pressaoArterialFinal" id="pressaoArterialFinal" value="{{dataValues.pressao_arterial_final}}" />
+	<input type="hidden" name="grauInicial" id="grauInicial" value="{{dataValues.grau_inicial}}" />
+	<input type="hidden" name="grauFinal" id="grauFinal" value="{{dataValues.grau_final}}" />
+    <div class="w-100"></div>
+	<div class="analise-bordas">
+		<div class="row" style="margin-bottom: 0px">
+			<div class="col-sm">
+				<h4>Sinais Vitais</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm">
+				<div>
+					<h6>Frequência Respiratória</h6>
+				</div>
+				<div>
+					<canvas id="myChartFreqRes" width="200" height="110"></canvas>
+				</div>
+			</div>
+			<div class="col-sm">
+				<div>
+					<h6>Frequência Cardíaca</h6>
+				</div>
+				<div>
+					<canvas id="myChartFreqCard" width="200" height="110"></canvas>
+				</div>
+			</div>
+			<div class="col-sm">
+				<div>
+					<h6>Saturação do Oxigênio</h6>
+				</div>
+				<div>
+					<canvas id="myChartSatOxigenio" width="200" height="110"></canvas>
+				</div>
+			</div>
+			<div class="col-sm">
+				<div>
+					<h6>Pressão Arterial</h6>
+				</div>
+				<div>
+					<canvas id="myChartPressaoArterial" width="200" height="110"></canvas>
+				</div>
+			</div>
+			<div class="col-sm">
+				<div>
+					<h6>Graú de Comprometimento Pulmonar</h6>
+				</div>
+				<div>
+					<canvas id="myChartGrau" width="200" height="110"></canvas>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			
+		</div>
+
+		<div class="row">
+			<div class="col-sm">
+				<div>
+					<h4>Frequência da Sessão</h4>
+				</div>
+				<div>
+					<canvas id="myChart" width="200" height="600"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm">
+				<div>
+					<h4>Média de Frequência da Sessão</h4>
+				</div>
+				<div>
+					<canvas id="myChart2" width="200" height="600"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm">
+				<div>
+					<h4>Dados da sessão</h4>
+				</div>
+				<div style="margin-left: 10px">
+					Tempo da Sessão: {{dataValues.vibracao_tempo_total}} s<br>
+					Média Pico Eixo X: {{dataValues.vibracao_media_x}} Hz<br>
+					Média Pico Eixo Y: {{dataValues.vibracao_media_y}} Hz<br>
+					Média Pico Eixo Z: {{dataValues.vibracao_media_z}} Hz
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<div class="col graph">
+	</div>
+    <div class="col graph">
+		
+	</div>
+    {{/sessoes}}
+</div>
+
+<script>
+		const sensor = document.getElementById("sensor").value;
+		if(sensor == "true") {
+			console.log('entro no true');
+			const picoX = JSON.parse("[" + document.getElementById("picoX").value + "]");
+			const picoY = JSON.parse("[" + document.getElementById("picoY").value + "]");
+			const picoZ = JSON.parse("[" + document.getElementById("picoZ").value + "]");
+			const tempo = JSON.parse("[" + document.getElementById("tempo").value + "]");
+			const mediaPicoX = JSON.parse("[" + document.getElementById("mediaPicoX").value + "]");
+			const mediaPicoY = JSON.parse("[" + document.getElementById("mediaPicoY").value + "]");
+			const mediaPicoZ = JSON.parse("[" + document.getElementById("mediaPicoZ").value + "]");
+
+			var ctx = document.getElementById("myChart").getContext("2d");
+			var myChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: tempo,
+					datasets: [
+						{
+							label: ["Eixo X"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: picoX,
+							fill: false,
+						},
+						{
+							label: ["Eixo Y"],
+							backgroundColor: "rgba(51, 204, 255)",
+							borderColor: "rgba(51, 204, 255)",
+							data: picoY,
+							fill: false,
+						},
+						{
+							label: ["Eixo Z"],
+							backgroundColor: "rgba(60,179,113)",
+							borderColor: "rgba(60,179,113)",
+							data: picoZ,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Pico de Frequência (Hz)'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Tempo (s)',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+
+			var ctx2 = document.getElementById("myChart2").getContext("2d");
+			var myChart = new Chart(ctx2, {
+				type: 'line',
+				data: {
+					labels: tempo,
+					datasets: [
+						{
+							label: ["Eixo X"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: mediaPicoX,
+							fill: false,
+						},
+						{
+							label: ["Eixo Y"],
+							backgroundColor: "rgba(51, 204, 255)",
+							borderColor: "rgba(51, 204, 255)",
+							data: mediaPicoY,
+							fill: false,
+						},
+						{
+							label: ["Eixo Z"],
+							backgroundColor: "rgba(60,179,113)",
+							borderColor: "rgba(60,179,113)",
+							data: mediaPicoZ,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Média do Pico de Frequência (Hz)'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Tempo (s)',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+		}
+
+		if(sensor == "false") {
+			const picoX = JSON.parse("[" + document.getElementById("picoX").value + "]");
+			const tempo = JSON.parse("[" + document.getElementById("tempo").value + "]");
+			const mediaPicoX = JSON.parse("[" + document.getElementById("mediaPicoX").value + "]");
+			const mediaPicoY = JSON.parse("[" + document.getElementById("mediaPicoY").value + "]");
+
+			var ctx = document.getElementById("myChart").getContext("2d");
+			var myChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: tempo,
+					datasets: [
+						{
+							label: ["Eixo X"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: picoX,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Pico de Frequência (Hz)'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Tempo (s)',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+		}
+
+	let fr_inicial = document.getElementById("freqRespiratoriaInicial").value;
+	let fr_final = document.getElementById("freqRespiratoriaFinal").value;
+	let fr_inicial_array = [];
+	let fr_final_array = [];
+
+	fr_inicial_array.push(fr_inicial);
+	fr_final_array.push(fr_final);
+	fr_final_array.push(0);
+
+	var ctxFreqRes = document.getElementById('myChartFreqRes');
+	var myChartFreqRes = new Chart(ctxFreqRes, {
+		type: 'bar',
+		data: {
+			labels: ['Frequência Respiratória'],
+			datasets: [{
+				label: ['Inicial'],
+				data: fr_inicial_array,
+				backgroundColor: [
+					'rgba(255, 99, 132)'
+				],
+			},{
+				label: ['Final'],
+				data: fr_final_array,
+				backgroundColor: [
+					'rgba(0, 140, 255)'
+				],
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	});
+
+	let fc_inicial = document.getElementById("freqCardiacaInicial").value;
+	let fc_final = document.getElementById("freqCardiacaFinal").value;
+	let fc_inicial_array = [];
+	let fc_final_array = [];
+
+	fc_inicial_array.push(fc_inicial);
+	fc_final_array.push(fc_final);
+	fc_final_array.push(0);
+
+	var ctxFreqCard = document.getElementById('myChartFreqCard');
+	var myChartFreqCard = new Chart(ctxFreqCard, {
+		type: 'bar',
+		data: {
+			labels: ['Frequência Cardíaca'],
+			datasets: [{
+				label: ['Inicial'],
+				data: fc_inicial_array,
+				backgroundColor: [
+					'rgba(255, 99, 132)'
+				],
+			},{
+				label: ['Final'],
+				data: fc_final_array,
+				backgroundColor: [
+					'rgba(0, 140, 255)'
+				],
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	});
+
+	let so_inicial = document.getElementById("satOxigenioInicial").value;
+	let so_final = document.getElementById("satOxigenioFinal").value;
+	let so_inicial_array = [];
+	let so_final_array = [];
+
+	so_inicial_array.push(so_inicial);
+	so_final_array.push(so_final);
+	so_final_array.push(0);
+
+	var ctxSatOxigenio = document.getElementById('myChartSatOxigenio');
+	var myChartSatOxigenio = new Chart(ctxSatOxigenio, {
+		type: 'bar',
+		data: {
+			labels: ['Saturação do Oxigênio'],
+			datasets: [{
+				label: ['Inicial'],
+				data: so_inicial_array,
+				backgroundColor: [
+					'rgba(255, 99, 132)'
+				],
+			},{
+				label: ['Final'],
+				data: so_final_array,
+				backgroundColor: [
+					'rgba(0, 140, 255)'
+				],
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	});
+
+	let pa_inicial = document.getElementById("pressaoArterialInicial").value;
+	let pa_final = document.getElementById("pressaoArterialFinal").value;
+	let pa_inicial_array = [];
+	let pa_final_array = [];
+
+	pa_inicial_array.push(pa_inicial);
+	pa_final_array.push(pa_final);
+	pa_final_array.push(0);
+
+	var ctxPressaoArterial = document.getElementById('myChartPressaoArterial');
+	var myChartPressaoArterial = new Chart(ctxPressaoArterial, {
+		type: 'bar',
+		data: {
+			labels: ['Pressão Arterial'],
+			datasets: [{
+				label: ['Inicial'],
+				data: pa_inicial_array,
+				backgroundColor: [
+					'rgba(255, 99, 132)'
+				],
+			},{
+				label: ['Final'],
+				data: pa_final_array,
+				backgroundColor: [
+					'rgba(0, 140, 255)'
+				],
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	});
+
+	let gc_inicial = document.getElementById("grauInicial").value;
+	let gc_final = document.getElementById("grauFinal").value;
+	let gc_inicial_array = [];
+	let gc_final_array = [];
+
+	gc_inicial_array.push(gc_inicial);
+	gc_final_array.push(gc_final);
+	gc_final_array.push(0);
+
+	var ctxGrau = document.getElementById('myChartGrau');
+	var myChartGrau = new Chart(ctxGrau, {
+		type: 'bar',
+		data: {
+			labels: ['Graú de Comprometimento'],
+			datasets: [{
+				label: ['Inicial'],
+				data: gc_inicial_array,
+				backgroundColor: [
+					'rgba(255, 99, 132)'
+				],
+			},{
+				label: ['Final'],
+				data: gc_final_array,
+				backgroundColor: [
+					'rgba(0, 140, 255)'
+				],
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	});
+
+</script>
