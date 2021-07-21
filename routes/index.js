@@ -93,5 +93,7 @@ routes.get('/analise/:id', async (req, res) => {
 
 routes.get('/relatorio/html/:id', relatoriosController.analiseSessao);
 routes.get('/relatorio/pdf/:id', relatoriosController.analiseSessaoPDF);
+routes.get('/relatorio/geral/html/:id', relatoriosController.analiseGeral);
+routes.get('/relatorio/geral/pdf/:id', relatoriosController.analiseGeralPDF);
 
 module.exports = routes;

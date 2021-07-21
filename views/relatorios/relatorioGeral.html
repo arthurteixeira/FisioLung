@@ -1,0 +1,466 @@
+<link rel="stylesheet" href="/css/cadastroFisioterapeuta.css" />
+<div class="top">
+    <h2>Análise de Sessões</h2>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+<script src="/js/Chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
+<div class="form">
+        <div style="display: flex; justify-content: right; align-items: center; margin-right: 50px">
+            <h4>Gerado em: {{data}}</h4>
+        </div>
+        <div class="w-100"></div>
+        <div class="analise-bordas">
+            {{#pac}}
+            <div class="row">
+                <div class="col-sm">
+                    <div>
+                        <h5 style="font-weight: bold">Dados do Paciente</h5>
+                    </div>
+                    <div>
+                        <h6>Nome: {{dataValues.name}}</h6>
+                        <h6>Sexo: {{dataValues.sexo}}</h6>
+                        <h6>Peso: {{dataValues.peso}}</h6>
+                        <h6>Patologia: {{dataValues.patologia}}</h6>
+                    </div>
+                </div>
+            </div>
+            {{/pac}}
+            <div class="row">
+                <div class="col-sm">
+                    <h6 style="font-weight: bold">Tabela Geral das Sessões</h6>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Fisio</th>
+                            <th scope="col">FR Inicial</th>
+                            <th scope="col">FR Final</th>
+                            <th scope="col">FC Inicial</th>
+                            <th scope="col">FC Final</th>
+                            <th scope="col">SO Inicial</th>
+                            <th scope="col">SO Final</th>
+                            <th scope="col">PA Inicial</th>
+                            <th scope="col">PA Final</th>
+                            <th scope="col">GCP Inicial</th>
+                            <th scope="col">GCP Final</th>
+                            <th scope="col">Tempo (s)</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Sessão</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each sessa}}
+                            <tr>
+                            <th scope="row">{{dataValues.id}}</th>
+                            <td>{{dataValues.fisioterapeutas.dataValues.name}}</td>
+                            <td>{{dataValues.freq_respiratoria_inicial}}</td>
+                            <td>{{dataValues.freq_respiratoria_final}}</td>
+                            <td>{{dataValues.freq_cardiaca_inicial}}</td>
+                            <td>{{dataValues.freq_cardiaca_final}}</td>
+                            <td>{{dataValues.sat_oxigenio_inicial}}</td>
+                            <td>{{dataValues.sat_oxigenio_final}}</td>
+                            <td>{{dataValues.pressao_arterial_inicial}}</td>
+                            <td>{{dataValues.pressao_arterial_final}}</td>
+                            <td>{{dataValues.grau_inicial}}</td>
+                            <td>{{dataValues.grau_final}}</td>
+                            <td>{{dataValues.vibracao_tempo_total}}</td>
+                            <td id="tabela{{dataValues.id}}"></td>
+                            <td> <a href="/analise/{{dataValues.id}}">Acessar</a> </td>
+                            </tr>
+                            <tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <div>
+                        <h6 style="font-weight: bold">Frequência Respiratória</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartFreqRes" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <div>
+                        <h6 style="font-weight: bold">Frequência Cardíaca</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartFreqCard" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <div>
+                        <h6 style="font-weight: bold">Saturação do Oxigênio</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartSatOxigenio" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <div>
+                        <h6 style="font-weight: bold">Pressão Arterial</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartPressaoArterial" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <div>
+                        <h6 style="font-weight: bold">Graú de Comprometimento Pulmonar</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartGrau" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<script>    
+    const jsonSessoesPuro = "{{sessoes}}"
+    const jsonSessoes = jsonSessoesPuro.replace(/&quot;/g, '\"');
+    console.log(jsonSessoes);
+    const sessoes = JSON.parse(jsonSessoes);
+    console.log(sessoes);
+
+    for(let i = 0; i < sessoes.length; i++) {
+        let id = sessoes[i].id
+        let data = sessoes[i].createdAt;
+        var today = new Date(data);
+        var year = today.getFullYear();
+        var mes = today.getMonth()+1;
+        var dia = today.getDate();
+        var fecha =dia+"/"+mes+"/"+year;
+        document.getElementById(`tabela${id}`).innerText = fecha;
+    }
+
+    let fr_inicial_array = [];
+	let fr_final_array = [];
+
+    let fc_inicial_array = [];
+	let fc_final_array = [];
+
+    let so_inicial_array = [];
+	let so_final_array = [];
+
+    let pa_inicial_array = [];
+	let pa_final_array = [];
+
+    let gc_inicial_array = [];
+	let gc_final_array = [];
+
+    let numberSessao = [];
+
+    for(let i = 0; i < sessoes.length; i++) {
+        let z = i+1;
+        let sessao = 'Sessão ' + z
+        numberSessao.push(sessao)
+        if(sessoes[i].freq_respiratoria_inicial == null){
+            fr_inicial_array.push(0);
+        }else{
+            fr_inicial_array.push(sessoes[i].freq_respiratoria_inicial);
+        }
+
+        if(sessoes[i].freq_respiratoria_final == null){
+            fr_final_array.push(0);
+        }else{
+            fr_final_array.push(sessoes[i].freq_respiratoria_final);
+        }
+
+        if(sessoes[i].freq_cardiaca_inicial == null){
+            fc_inicial_array.push(0);
+        }else{
+            fc_inicial_array.push(sessoes[i].freq_cardiaca_inicial);
+        }
+
+        if(sessoes[i].freq_respiratoria_final == null){
+            fc_final_array.push(0);
+        }else{
+            fc_final_array.push(sessoes[i].freq_cardiaca_final);
+        }
+
+        if(sessoes[i].sat_oxigenio_inicial == null){
+            so_inicial_array.push(0);
+        }else{
+            so_inicial_array.push(sessoes[i].sat_oxigenio_inicial);
+        }
+
+        if(sessoes[i].sat_oxigenio_final == null){
+            so_final_array.push(0);
+        }else{
+            so_final_array.push(sessoes[i].sat_oxigenio_final);
+        }
+
+        if(sessoes[i].pressao_arterial_inicial == null){
+            pa_inicial_array.push(0);
+        }else{
+            pa_inicial_array.push(sessoes[i].pressao_arterial_inicial);
+        }
+
+        if(sessoes[i].pressao_arterial_final == null){
+            pa_final_array.push(0);
+        }else{
+            pa_final_array.push(sessoes[i].pressao_arterial_final);
+        }
+
+        if(sessoes[i].grau_inicial == null){
+            gc_inicial_array.push(0);
+        }else{
+            gc_inicial_array.push(sessoes[i].grau_inicial);
+        }
+
+        if(sessoes[i].grau_final == null){
+            gc_final_array.push(0);
+        }else{
+            gc_final_array.push(sessoes[i].grau_final);
+        }
+    } 
+
+
+
+    var ctxFreqRes = document.getElementById('myChartFreqRes').getContext("2d");
+			var myChartFreqRes = new Chart(ctxFreqRes, {
+				type: 'line',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Inicial"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: fr_inicial_array,
+							fill: false,
+						},
+                        {
+							label: ["Final"],
+							backgroundColor: "rgba(0, 140, 255)",
+							borderColor: "rgba(0, 140, 255)",
+							data: fr_final_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Frequência Respiratória'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+
+    var ctxFreqCard = document.getElementById('myChartFreqCard').getContext("2d");
+			var myChartFreqCard = new Chart(ctxFreqCard, {
+				type: 'line',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Inicial"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: fc_inicial_array,
+							fill: false,
+						},
+                        {
+							label: ["Final"],
+							backgroundColor: "rgba(0, 140, 255)",
+							borderColor: "rgba(0, 140, 255)",
+							data: fc_final_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Frequência Cardíaca'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+
+    var ctxSatOxigenio = document.getElementById('myChartSatOxigenio').getContext("2d");
+			var myChartSatOxigenio = new Chart(ctxSatOxigenio, {
+				type: 'line',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Inicial"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: so_inicial_array,
+							fill: false,
+						},
+                        {
+							label: ["Final"],
+							backgroundColor: "rgba(0, 140, 255)",
+							borderColor: "rgba(0, 140, 255)",
+							data: so_final_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Saturação do Oxigênio'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+
+    var ctxPressaoArterial = document.getElementById('myChartPressaoArterial').getContext("2d");
+			var myChartPressaoArterial = new Chart(ctxPressaoArterial, {
+				type: 'line',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Inicial"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: pa_inicial_array,
+							fill: false,
+						},
+                        {
+							label: ["Final"],
+							backgroundColor: "rgba(0, 140, 255)",
+							borderColor: "rgba(0, 140, 255)",
+							data: pa_final_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Pressão Arterial'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',
+							},
+						}]
+					}     
+				}
+			});
+
+    var ctxGrau = document.getElementById('myChartGrau').getContext("2d");
+			var myChartGrau = new Chart(ctxGrau, {
+				type: 'line',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Inicial"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: gc_inicial_array,
+							fill: false,
+						},
+                        {
+							label: ["Final"],
+							backgroundColor: "rgba(0, 140, 255)",
+							borderColor: "rgba(0, 140, 255)",
+							data: gc_final_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Grau de Comprometimento Pulmonar'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',   
+							},
+						}]
+					}     
+				}
+			});
+
+</script>
