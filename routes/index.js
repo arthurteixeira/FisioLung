@@ -91,6 +91,24 @@ routes.get('/analise/:id', async (req, res) => {
     return res.render('analiseSessao', { sessoes: sessao });
 });
 
+//Relatorio
+
+routes.get('/relatorios', async (req, res) => {
+    const pc = await pacientes.findAll();
+
+    return res.render('relatorios', { pacientes: pc });
+});
+
+routes.get('/relatorios/especifico/:id', async (req, res) => {
+    const { id } = req.params;
+    const sessao = await sessoes.findAll({
+        where: {
+            paciente_id: id,
+        }
+    });
+    return res.render('relatoriosEspecifico', { sessoes: sessao });
+});
+
 routes.get('/relatorio/html/:id', relatoriosController.analiseSessao);
 routes.get('/relatorio/pdf/:id', relatoriosController.analiseSessaoPDF);
 routes.get('/relatorio/geral/html/:id', relatoriosController.analiseGeral);

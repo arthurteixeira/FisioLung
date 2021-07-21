@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="/css/cadastroFisioterapeuta.css" />
+<div class="top">
+    <h2>Relatórios</h2>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+
+<div class="campo">
+    <div class="campo_obrigatorio">
+        <label><i style="color: #37bbf8;" class="fas fa-info-circle" aria-hidden="true"></i> Campos
+            obrigatórios</label>
+    </div>
+</div>
+<br>
+
+<div id="selecionaPacienteEspec" class="form">
+    <form method="post">
+        <div class="d-flex flex-column bd-highlight mb-3">
+            <div class="p-2 bd-highlight">
+                <label class="my-1 mr-2" for="sessaoEspec">Selecionar Sessão</label>
+                <select name="sessaoEspec" class="custom-select my-1 mr-sm-2" id="sessaoEspec">
+                    {{#sessoes}}
+                    <option value="{{dataValues.id}}">Nº: {{dataValues.id}} | Data: {{dataValues.createdAt}}</option>
+                    {{/sessoes}}
+                </select>
+            </div>
+            <div class="p-2 bd-highlight">
+                <label class="my-1 mr-2" for="formatoGeral">Selecionar Formato</label>
+                <select name="formatoEspec" class="custom-select my-1 mr-sm-2" id="formatoEspec">
+                    <option value="html">HTML</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </div>
+        </div>
+        <div class="d-flex flex-column bd-highlight mb-3">
+            <div class="p-2 bd-highlight">
+                <button type="button" onClick="criarRelatorioEspec()" class="btn btn-primary button">
+                    Prosseguir
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script>
+
+    function criarRelatorioEspec() {
+        const id = document.getElementById('sessaoEspec').value;
+        const formato = document.getElementById('formatoEspec').value; 
+
+        fetch(`/relatorio/${formato}/${id}`, {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json' },
+        }).then(ref => {
+            window.location.href = `/relatorio/${formato}/${id}`;
+        });
+    }
+
+</script>
