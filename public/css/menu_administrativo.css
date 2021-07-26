@@ -54,10 +54,6 @@ p {
     src: url("./fonts/Playlist Script.otf") format("truetype");
 }
 
-.playlist-font {
-    font-family: "Playlist";
-}
-
 .cor-navbar {
     padding: 0px;
     background: #37bbf8;

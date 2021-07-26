@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { format, endOfDay, subDays } = require('date-fns');
 const { sessoes, pacientes } = require('../models/');
-const pdf = require('../utils/createPDF');
+const html_to_pdf = require('html-pdf-node');
+const moment = require('moment');
 
 module.exports = {
     async analiseSessao(req, res){
@@ -19,16 +20,18 @@ module.exports = {
 
     async analiseSessaoPDF(req, res){
         const { id } = req.params;
-        const sessao = await sessoes.findAll({
-            where: {
-                id,
-            }
-        });
 
-        let diaAtual = format(endOfDay(new Date()), 'dd/MM/yyyy');
+        let options = { format: 'A4' };
+        let file = { url: `http://localhost:3000/relatorio/html/${id}` };
+        let buffer = await html_to_pdf.generatePdf(file, options);
+        
+        moment.locale('pt-br');
+        let milis = moment().valueOf();
+        let data = moment().format('DDMMYYYY');
+        fs.writeFileSync(`relatorio-espec-${id}-${data}${milis}.pdf`, buffer ,'binary');
 
-        let file = await pdf.createPDF("relatorioSessao", { name: "relatorioSessao", sessoes: sessao, data: diaAtual});
-        res.sendFile(`${file}`);
+        const pdfPath = path.join(__dirname + '/..' + `/relatorio-espec-${id}-${data}${milis}.pdf`);
+        res.sendFile(`${pdfPath}`);
     },
 
     async analiseGeral(req, res){
@@ -57,25 +60,17 @@ module.exports = {
 
     async analiseGeralPDF(req, res){
         const { id } = req.params;
-        const sessao = await sessoes.findAll({
-            include: [{
-                association: 'fisioterapeutas',
-                attributes: ['name'],
-            }],
 
-            where: {
-                paciente_id: id,
-            }
-        });
+        let options = { format: 'A4' };
+        let file = { url: `http://localhost:3000/relatorio/geral/html/${id}` };
+        let buffer = await html_to_pdf.generatePdf(file, options);
 
-        const paciente = await pacientes.findAll({
-            where: {
-                id,
-            }
-        });
+        moment.locale('pt-br');
+        let milis = moment().valueOf();
+        let data = moment().format('DDMMYYYY');
+        fs.writeFileSync(`relatorio-geral-${id}-${data}${milis}.pdf`, buffer ,'binary');
 
-        let diaAtual = format(endOfDay(new Date()), 'dd/MM/yyyy');
-        let file = await pdf.createPDF("relatorioGeral", { name: "relatorioSessao", sessa: sessao, pac: paciente, sessoes: JSON.stringify(sessao), pacientes: JSON.stringify(paciente), data: diaAtual});
-        res.sendFile(`${file}`);
+        const pdfPath = path.join(__dirname + '/..' + `/relatorio-geral-${id}-${data}${milis}.pdf`);
+        res.sendFile(`${pdfPath}`);
     }
 };

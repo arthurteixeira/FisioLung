@@ -17,7 +17,7 @@ module.exports = {
         if(fone == '')
             fone = null;
 
-        const paciente = await pacientes.create({
+        await pacientes.create({
             name,
             cpf,
             data_nascimento,

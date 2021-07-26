@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const fisioterapeutas = sequelize.define(
+    return sequelize.define(
         'fisioterapeutas',
         {
             name: DataTypes.STRING,
@@ -13,7 +13,4 @@ module.exports = (sequelize, DataTypes) => {
             sequelize
         }
     );
-    //fisioterapeutas.associate = function (models) {};
-
-    return fisioterapeutas;
 };

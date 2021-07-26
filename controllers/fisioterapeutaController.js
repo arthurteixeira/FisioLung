@@ -13,7 +13,7 @@ module.exports = {
         if(fone == '')
             fone = null;
 
-        const fisioterapeuta = await fisioterapeutas.create({
+        await fisioterapeutas.create({
             name,
             cpf,
             data_nascimento,
