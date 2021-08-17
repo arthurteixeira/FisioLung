@@ -17,7 +17,7 @@
         <div class="analise-bordas">
             {{#pac}}
             <div class="row">
-                <div class="col-sm">
+                <div class="col-sm analise">
                     <div>
                         <h5 style="font-weight: bold">Dados do Paciente</h5>
                     </div>
@@ -31,7 +31,7 @@
             </div>
             {{/pac}}
             <div class="row">
-                <div class="col-sm">
+                <div class="col-sm analise">
                     <h6 style="font-weight: bold">Tabela Geral das Sessões</h6>
                     <table class="table">
                         <caption>FR = Frequência Respiratória, FC = Frequência Cardíaca, SO = Saturação do Oxigênio, PA = Pressão Arterial, GCP = Grau de Comprometimento Pulmonar</caption>
@@ -80,7 +80,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm">
+                <div class="col-sm analise">
                     <div>
                         <h6 style="font-weight: bold">Frequência Respiratória</h6>
                     </div>
@@ -90,7 +90,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm">
+                <div class="col-sm analise">
                     <div>
                         <h6 style="font-weight: bold">Frequência Cardíaca</h6>
                     </div>
@@ -100,7 +100,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm">
+                <div class="col-sm analise">
                     <div>
                         <h6 style="font-weight: bold">Saturação do Oxigênio</h6>
                     </div>
@@ -110,7 +110,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm">
+                <div class="col-sm analise">
                     <div>
                         <h6 style="font-weight: bold">Pressão Arterial</h6>
                     </div>
@@ -120,12 +120,32 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm">
+                <div class="col-sm analise">
                     <div>
                         <h6 style="font-weight: bold">Graú de Comprometimento Pulmonar</h6>
                     </div>
                     <div>
                         <canvas id="myChartGrau" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm analise">
+                    <div>
+                        <h6 style="font-weight: bold">Como o paciente se sente</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartEstadoP" width="200" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm analise">
+                    <div>
+                        <h6 style="font-weight: bold">Estado do paciente pelo fisioterapeuta</h6>
+                    </div>
+                    <div>
+                        <canvas id="myChartEstadoF" width="200" height="300"></canvas>
                     </div>
                 </div>
             </div>
@@ -164,6 +184,9 @@
 
     let gc_inicial_array = [];
 	let gc_final_array = [];
+
+    let ep_array = [];
+    let ef_array = [];
 
     let numberSessao = [];
 
@@ -229,6 +252,18 @@
             gc_final_array.push(0);
         }else{
             gc_final_array.push(sessoes[i].grau_final);
+        }
+
+        if(sessoes[i].estado_paciente == null){
+            ep_array.push(0);
+        }else{
+            ep_array.push(sessoes[i].estado_paciente);
+        }
+
+        if(sessoes[i].estado_fisio == null){
+            ef_array.push(0);
+        }else{
+            ef_array.push(sessoes[i].estado_fisio);
         }
     } 
 
@@ -451,6 +486,84 @@
 							scaleLabel: {
 								display: true,
 								labelString: 'Grau de Comprometimento Pulmonar'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',   
+							},
+						}]
+					}     
+				}
+			});
+
+    var ctxEstadoP = document.getElementById('myChartEstadoP').getContext("2d");
+			var myChartEstadoP = new Chart(ctxEstadoP, {
+				type: 'bar',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Valor"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: ep_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Estado do Paciente'
+							}
+						}],
+						xAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: 'Sessão',
+								type: 'time',   
+							},
+						}]
+					}     
+				}
+			});
+        
+        var ctxEstadoF = document.getElementById('myChartEstadoF').getContext("2d");
+			var myChartEstadoF = new Chart(ctxEstadoF, {
+				type: 'bar',
+				data: {
+					labels: numberSessao,
+					datasets: [
+						{
+							label: ["Valor"],
+							backgroundColor: "rgba(255, 99, 132)",
+							borderColor: "rgba(255, 99, 132)",
+							data: ef_array,
+							fill: false,
+						},
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+							scaleLabel: {
+								display: true,
+								labelString: 'Estado do Paciente'
 							}
 						}],
 						xAxes: [{
