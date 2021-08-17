@@ -228,6 +228,66 @@
 			</div>
 			<div class="row">
 				<div class="col-sm">
+					<label for="estado_paciente">Estado do paciente (fisioterapeuta)</label>
+					<div class="row">
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoPaciente" id="flexEstadoPaciente1" checked>
+							<label class="form-check-label" for="flexEstadoPaciente1">1</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoPaciente" id="flexEstadoPaciente2">
+							<label class="form-check-label" for="flexEstadoPaciente2">2</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoPaciente" id="flexEstadoPaciente3">
+							<label class="form-check-label" for="flexEstadoPaciente3">3</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoPaciente" id="flexEstadoPaciente4">
+							<label class="form-check-label" for="flexEstadoPaciente4">4</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoPaciente" id="flexEstadoPaciente5">
+							<label class="form-check-label" for="flexEstadoPaciente5">5</label>
+						</div>
+					</div>
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="grau_final">Estado do paciente (paciente)</label>
+					<div class="row">
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoFisio" id="flexEstadoFisio1" checked>
+							<label class="form-check-label" for="flexEstadoFisio1">1</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoFisio" id="flexEstadoFisio2">
+							<label class="form-check-label" for="flexEstadoFisio2">2</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoFisio" id="flexEstadoFisio3">
+							<label class="form-check-label" for="flexEstadoFisio3">3</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoFisio" id="flexEstadoFisio4">
+							<label class="form-check-label" for="flexEstadoFisio4">4</label>
+						</div>
+						<div class="form-check col-sm">
+							<input class="form-check-input" type="radio" name="flexEstadoFisio" id="flexEstadoFisio5">
+							<label class="form-check-label" for="flexEstadoFisio5">5</label>
+						</div>
+					</div>
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
+					<label for="evolucao">Evolução</label>
+					<textarea class="form-control" id="evolucao" rows="3"></textarea>
+            	</div>
+			</div>
+			<div class="row">
+				<div class="col-sm">
 					<button type="button" id="yesEncerrar" onClick="fimSessao()" class="btn btn-primary button">Encerrar Sessão</button>
 				</div>
 			</div>
@@ -623,6 +683,28 @@
   			}
 		}
 
+		let valor_estadoP = null;
+		var estados1 = document.getElementsByName('flexEstadoPaciente');
+		for (var i = 0, length = estados1.length; i < length; i++) {
+  			if (estados1[i].checked) {
+				valor_estadoP = i+1;
+				break;
+  			}
+		}
+
+		console.log('valor estadop: ' + valor_estadoP);
+
+		let valor_estadoF = null;
+		var estados2 = document.getElementsByName('flexEstadoFisio');
+		for (var i = 0, length = estados2.length; i < length; i++) {
+  			if (estados2[i].checked) {
+				valor_estadoF = i+1;
+				break;
+  			}
+		}
+
+		console.log('valor estadof: ' + valor_estadoF);
+
         fetch('/sessao', {
              method: 'POST',
              headers: { 'Content-type': 'application/json' },
@@ -641,9 +723,12 @@
 				sat_oxigenio_final: document.getElementById('sat_oxigenio_final').value, 
 				pressao_arterial_final: document.getElementById('pressao_arterial_final').value, 
 				grau_final: valor_grau2,
+				evolucao: document.getElementById('evolucao').value,
+				estado_paciente: valor_estadoP,
+				estado_fisio: valor_estadoF,
                 vibracao_pico_x: vibracao_picoX,
                 vibracao_pico_y: vibracao_picoY,
-                vibracao_pico_z: vibracao_picoZ, 
+                vibracao_pico_z: vibracao_picoZ,
                 vibracao_tempo: vibracao_tempo,
 				vibracao_media_x: mediaX,
 				vibracao_media_y: mediaY,

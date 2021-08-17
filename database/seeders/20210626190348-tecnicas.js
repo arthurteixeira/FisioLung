@@ -18,12 +18,6 @@ module.exports = {
                   updated_at: "06/25/2021 16:58",
                 },
                 {
-                  nome: "Vibrocompressão Torácica",
-                  modo: "Técnica Não Invasiva",  
-                  created_at: "06/25/2021 16:58",
-                  updated_at: "06/25/2021 16:58",
-                },
-                {
                   nome: "Drenagem Postural",
                   modo: "Técnica Não Invasiva",  
                   created_at: "06/25/2021 16:58",

@@ -20,6 +20,9 @@ module.exports = {
 			sat_oxigenio_final, 
 			pressao_arterial_final, 
 			grau_final,
+            evolucao,
+			estado_paciente,
+			estado_fisio,
             vibracao_pico_x,
             vibracao_pico_y,
             vibracao_pico_z,
@@ -48,6 +51,18 @@ module.exports = {
         if(pressao_arterial_inicial == "")
             pressao_arterial_inicial = null;
 
+        if(freq_respiratoria_final == "")
+            freq_respiratoria_final = null;
+        
+        if(freq_cardiaca_final == "")
+            freq_cardiaca_final = null;
+        
+        if(sat_oxigenio_final == "")
+            sat_oxigenio_final = null;
+        
+        if(pressao_arterial_final == "")
+            pressao_arterial_final = null;
+
         const sessao = await sessoes.create({
             paciente_id,
             fisioterapeuta_id,
@@ -63,6 +78,9 @@ module.exports = {
 			sat_oxigenio_final, 
 			pressao_arterial_final, 
 			grau_final,
+            evolucao,
+			estado_paciente,
+			estado_fisio,
             vibracao_pico_x,
             vibracao_pico_y,
             vibracao_pico_z,

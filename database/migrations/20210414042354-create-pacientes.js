@@ -15,7 +15,7 @@ module.exports = {
       },
       cpf: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         unique: true,
       },
       data_nascimento: {

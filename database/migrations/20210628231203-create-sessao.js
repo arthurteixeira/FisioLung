@@ -68,6 +68,18 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
+      evolucao: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      estado_paciente: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      estado_fisio: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       vibracao_pico_x: {
         type: Sequelize.ARRAY(Sequelize.FLOAT),
         allowNull: true,

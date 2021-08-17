@@ -29,6 +29,8 @@
 	<input type="hidden" name="pressaoArterialFinal" id="pressaoArterialFinal" value="{{dataValues.pressao_arterial_final}}" />
 	<input type="hidden" name="grauInicial" id="grauInicial" value="{{dataValues.grau_inicial}}" />
 	<input type="hidden" name="grauFinal" id="grauFinal" value="{{dataValues.grau_final}}" />
+	<input type="hidden" name="estadoPaciente" id="estadoPaciente" value="{{dataValues.estado_paciente}}" />
+	<input type="hidden" name="estadoFisio" id="estadoFisio" value="{{dataValues.estado_fisio}}" />
     <div class="w-100"></div>
 	<div class="analise-bordas">
 		
@@ -87,6 +89,25 @@
 		<div class="row">
 			<div class="col-sm analise">
 				<div>
+					<h4>Como o paciente se sente</h4>
+				</div>
+				<div style="margin-left: 10px">
+					Valor: {{dataValues.estado_paciente}}
+				</div>
+			</div>
+			<div class="col-sm analise">
+				<div>
+					<h4>Estado do paciente pelo fisioterapeuta</h4>
+				</div>
+				<div style="margin-left: 10px">
+					Valor: {{dataValues.estado_fisio}}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm analise">
+				<div>
 					<h4>Frequência da Sessão</h4>
 				</div>
 				<div>
@@ -101,6 +122,16 @@
 				</div>
 				<div>
 					<canvas id="myChart2" width="200" height="600"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm analise">
+				<div>
+					<h4>Evolução</h4>
+				</div>
+				<div style="margin-left: 10px">
+					{{dataValues.evolucao}}
 				</div>
 			</div>
 		</div>
