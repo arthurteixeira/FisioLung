@@ -12,6 +12,8 @@ module.exports = {
             crefito = null;
         if(fone == '')
             fone = null;
+        if(cpf == '')
+            cpf = null;
 
         await fisioterapeutas.create({
             name,

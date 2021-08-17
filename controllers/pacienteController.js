@@ -16,6 +16,8 @@ module.exports = {
             sus = null;
         if(fone == '')
             fone = null;
+        if(cpf == '')
+            cpf = null;
 
         await pacientes.create({
             name,
