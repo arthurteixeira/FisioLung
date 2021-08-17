@@ -799,8 +799,31 @@
                 vibracao_tempo_total: tempoDeFim
              }),
         }).then(ref => {
-            window.location.href = '/';
+			saveSuccessfullRequestToLocalStorage();
+            window.location.href = '';
         });
     }
 
 	</script>
+
+	<script>
+		checkSuccessfullRequest();
+
+		function saveSuccessfullRequestToLocalStorage() {
+			localStorage.setItem("_success", true);
+		}
+
+		function clearSuccessfullRequest() {
+			localStorage.removeItem("_success");
+		}
+
+		function checkSuccessfullRequest() {
+			const successfullRequest = localStorage.getItem("_success");
+
+			if (successfullRequest) {
+				alert("Sessão registrada com sucesso!");
+				clearSuccessfullRequest();
+			}
+		}
+	</script>
+	

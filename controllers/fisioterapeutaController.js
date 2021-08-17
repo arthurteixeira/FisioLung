@@ -22,6 +22,6 @@ module.exports = {
             fone,
         });
         
-        res.redirect('/');
+        res.redirect('');
     }
 };

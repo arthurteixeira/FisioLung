@@ -57,10 +57,32 @@
                 </div>
             </div>
             <div class="row">
-                <button type="submit" class="btn btn-primary button">
+                <button onClick="saveSuccessfullRequestToLocalStorage()" type="submit" class="btn btn-primary button">
                     Cadastrar
                 </button>
             </div>
         </div>
     </form>
 </div>
+
+
+<script>
+    checkSuccessfullRequest();
+
+    function saveSuccessfullRequestToLocalStorage() {
+        localStorage.setItem("_success", true);
+    }
+
+    function clearSuccessfullRequest() {
+        localStorage.removeItem("_success");
+    }
+
+    function checkSuccessfullRequest() {
+        const successfullRequest = localStorage.getItem("_success");
+
+        if (successfullRequest) {
+            alert("Fisioterapeuta cadastrado com sucesso!");
+            clearSuccessfullRequest();
+        }
+    }
+</script>

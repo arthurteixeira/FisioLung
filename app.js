@@ -4,6 +4,7 @@ const SerialPort = require("serialport");
 const cors = require('cors');
 const morgan = require('morgan');
 const handlebars = require('express-handlebars');
+const flash = require('connect-flash');
 
 const { StringStream } = require('scramjet');
 let CONEXAO = 0;
@@ -36,6 +37,7 @@ app.set('view engine', 'handlebars');
 const index = require('./routes/index');
 
 //Configurando as Rotas
+app.use(flash());
 app.use('/', index);
 
 
